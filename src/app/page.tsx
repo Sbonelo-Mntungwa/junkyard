@@ -139,6 +139,10 @@ export default function Home() {
           .transmissions {
             display: none;
           }
+
+          footer {
+            display: none;
+          }
         }
       `}</style>
 
@@ -322,7 +326,7 @@ export default function Home() {
           </div>
         </div>
 
-        <footer style={{ position: 'absolute', bottom: '1.5rem', textAlign: 'center' }}>
+        <footer style={{ position: 'absolute', bottom: '0.75rem', textAlign: 'center' }}>
           <p style={{ fontSize: '0.8rem', color: '#5a5475', fontFamily: 'Space Mono, monospace' }}>
             Lost in the digital cosmos
           </p>
