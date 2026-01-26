@@ -79,10 +79,65 @@ export default function Home() {
           width: 100%;
         }
 
+        .card-description,
+        .card-tags {
+          display: block;
+        }
+
+        .card-arrow {
+          position: absolute;
+          bottom: 1.25rem;
+          right: 1.25rem;
+          font-size: 1.25rem;
+          color: #5a5475;
+        }
+
+        .transmissions {
+          font-size: 0.75rem;
+          color: #5a5475;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          margin-bottom: 1.5rem;
+          font-family: 'Space Mono', monospace;
+        }
+
         @media (max-width: 640px) {
           .projects-grid {
-            grid-template-columns: 1fr;
-            max-width: 320px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            max-width: 100%;
+            padding: 0 0.5rem;
+          }
+
+          .project-card {
+            padding: 1rem;
+            border-radius: 8px;
+          }
+
+          .card-emoji {
+            font-size: 1.5rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          .card-title {
+            font-size: 1.1rem !important;
+            margin-bottom: 0.25rem !important;
+          }
+
+          .card-description,
+          .card-tags {
+            display: none !important;
+          }
+
+          .card-arrow {
+            position: static;
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+          }
+
+          .transmissions {
+            display: none;
           }
         }
       `}</style>
@@ -90,7 +145,7 @@ export default function Home() {
       <style jsx>{`
         .junkyard-text {
           font-family: 'Orbitron', sans-serif;
-          font-size: clamp(4rem, 16vw, 12rem);
+          font-size: clamp(3rem, 16vw, 12rem);
           font-weight: 900;
           letter-spacing: -0.02em;
           background: linear-gradient(
@@ -165,7 +220,7 @@ export default function Home() {
 
         .welcome-text {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(2rem, 6vw, 4rem);
+          font-size: clamp(1.5rem, 6vw, 4rem);
           text-transform: uppercase;
           letter-spacing: 0.1em;
           color: #f0e6ff;
@@ -174,11 +229,12 @@ export default function Home() {
 
         .subtitle {
           font-family: 'Space Mono', monospace;
-          font-size: clamp(0.7rem, 1.2vw, 1rem);
+          font-size: clamp(0.55rem, 1.2vw, 1rem);
           color: #9b8fbf;
           text-align: center;
-          letter-spacing: 0.25em;
+          letter-spacing: 0.15em;
           text-transform: uppercase;
+          white-space: nowrap;
         }
 
         .blink {
@@ -208,25 +264,18 @@ export default function Home() {
         </div>
         
         <p className="subtitle" style={{ marginBottom: '1.5rem' }}>
-          A collection of experiments, projects &amp; digital debris<span className="blink">_</span>
+          Experiments, projects &amp; digital debris<span className="blink">_</span>
         </p>
 
-        <p style={{ 
-          fontSize: '0.75rem', 
-          color: '#5a5475', 
-          textTransform: 'uppercase', 
-          letterSpacing: '0.3em', 
-          marginBottom: '1.5rem',
-          fontFamily: 'Space Mono, monospace' 
-        }}>
+        <p className="transmissions">
           // Transmissions from the void
         </p>
 
         <div className="projects-grid">
           <Link href="/projects/rustpi" className="project-card featured" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <span style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🦀</span>
-              <h3 style={{ 
+              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🦀</span>
+              <h3 className="card-title" style={{ 
                 fontFamily: 'Bebas Neue, sans-serif',
                 fontSize: '1.6rem',
                 marginBottom: '0.5rem',
@@ -238,22 +287,22 @@ export default function Home() {
               }}>
                 RustPi
               </h3>
-              <p style={{ fontSize: '0.9rem', color: '#9b8fbf', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+              <p className="card-description" style={{ fontSize: '0.9rem', color: '#9b8fbf', lineHeight: 1.5, marginBottom: '0.75rem' }}>
                 Building a custom Linux distribution from scratch for Raspberry Pi.
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
                 <span className="tag">Rust</span>
                 <span className="tag">Linux</span>
                 <span className="tag">Embedded</span>
               </div>
+              <span className="card-arrow">→</span>
             </div>
-            <span style={{ position: 'absolute', bottom: '1.25rem', right: '1.25rem', fontSize: '1.25rem', color: '#5a5475' }}>→</span>
           </Link>
 
           <div className="project-card disabled">
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <span style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🌌</span>
-              <h3 style={{ 
+              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🌌</span>
+              <h3 className="card-title" style={{ 
                 fontFamily: 'Bebas Neue, sans-serif',
                 fontSize: '1.6rem',
                 marginBottom: '0.5rem',
@@ -262,14 +311,14 @@ export default function Home() {
               }}>
                 More Coming
               </h3>
-              <p style={{ fontSize: '0.9rem', color: '#5a5475', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+              <p className="card-description" style={{ fontSize: '0.9rem', color: '#5a5475', lineHeight: 1.5, marginBottom: '0.75rem' }}>
                 Additional projects will materialize from the cosmic void.
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
                 <span className="tag" style={{ opacity: 0.5 }}>???</span>
               </div>
+              <span className="card-arrow">⋯</span>
             </div>
-            <span style={{ position: 'absolute', bottom: '1.25rem', right: '1.25rem', fontSize: '1.25rem', color: '#5a5475' }}>⋯</span>
           </div>
         </div>
 
