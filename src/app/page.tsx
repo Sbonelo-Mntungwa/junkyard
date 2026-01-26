@@ -70,6 +70,21 @@ export default function Home() {
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
+
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(220px, 320px));
+          gap: 1.5rem;
+          max-width: 700px;
+          width: 100%;
+        }
+
+        @media (max-width: 640px) {
+          .projects-grid {
+            grid-template-columns: 1fr;
+            max-width: 320px;
+          }
+        }
       `}</style>
 
       <style jsx>{`
@@ -192,17 +207,22 @@ export default function Home() {
           <div className="junkyard-text">Junkyard</div>
         </div>
         
-        <p className="subtitle" style={{ marginBottom: '2.5rem' }}>
+        <p className="subtitle" style={{ marginBottom: '1.5rem' }}>
           A collection of experiments, projects &amp; digital debris<span className="blink">_</span>
         </p>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(2, minmax(220px, 320px))', 
-          gap: '1.5rem', 
-          maxWidth: '700px', 
-          width: '100%' 
+        <p style={{ 
+          fontSize: '0.75rem', 
+          color: '#5a5475', 
+          textTransform: 'uppercase', 
+          letterSpacing: '0.3em', 
+          marginBottom: '1.5rem',
+          fontFamily: 'Space Mono, monospace' 
         }}>
+          // Transmissions from the void
+        </p>
+
+        <div className="projects-grid">
           <Link href="/projects/rustpi" className="project-card featured" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
             <div style={{ position: 'relative', zIndex: 1 }}>
               <span style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🦀</span>
