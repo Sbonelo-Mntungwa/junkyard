@@ -101,27 +101,81 @@ export default function Home() {
           font-family: 'Space Mono', monospace;
         }
 
+        .main-container {
+          position: relative;
+          z-index: 10;
+          height: 100vh;
+          height: 100dvh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem;
+          overflow: hidden;
+          box-sizing: border-box;
+        }
+
+        .welcome-section {
+          text-align: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+          font-family: 'Space Mono', monospace;
+          font-size: clamp(0.55rem, 1.2vw, 1rem);
+          color: #9b8fbf;
+          text-align: center;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          white-space: nowrap;
+          margin-bottom: 1.5rem;
+        }
+
+        .site-footer {
+          position: absolute;
+          bottom: 1.5rem;
+          text-align: center;
+        }
+
+        .footer-text {
+          font-size: 0.8rem;
+          color: #5a5475;
+          font-family: 'Space Mono', monospace;
+        }
+
+        .footer-year {
+          margin-top: 0.25rem;
+          font-size: 0.8rem;
+          color: #8F0177;
+          letter-spacing: 0.2em;
+        }
+
         @media (max-width: 640px) {
+          .main-container {
+            padding: 0.5rem;
+            justify-content: space-evenly;
+          }
+
           .projects-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+            gap: 0.5rem;
             max-width: 100%;
-            padding: 0 0.5rem;
+            padding: 0 0.25rem;
           }
 
           .project-card {
-            padding: 1rem;
+            padding: 0.75rem;
             border-radius: 8px;
           }
 
           .card-emoji {
-            font-size: 1.5rem !important;
-            margin-bottom: 0.25rem !important;
+            font-size: 1.25rem !important;
+            margin-bottom: 0.15rem !important;
           }
 
           .card-title {
-            font-size: 1.1rem !important;
-            margin-bottom: 0.25rem !important;
+            font-size: 1rem !important;
+            margin-bottom: 0 !important;
           }
 
           .card-description,
@@ -132,16 +186,37 @@ export default function Home() {
           .card-arrow {
             position: static;
             display: block;
-            margin-top: 0.5rem;
-            font-size: 1rem;
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
           }
 
           .transmissions {
             display: none;
           }
 
-          footer {
-            display: none;
+          .welcome-section {
+            margin-bottom: 0.25rem;
+          }
+
+          .subtitle {
+            margin-bottom: 0.5rem;
+            font-size: 0.45rem;
+            letter-spacing: 0.08em;
+          }
+
+          .site-footer {
+            position: relative;
+            bottom: auto;
+            margin-top: 0.5rem;
+          }
+
+          .footer-text {
+            font-size: 0.6rem;
+          }
+
+          .footer-year {
+            font-size: 0.6rem;
+            margin-top: 0.1rem;
           }
         }
       `}</style>
@@ -149,7 +224,7 @@ export default function Home() {
       <style jsx>{`
         .junkyard-text {
           font-family: 'Orbitron', sans-serif;
-          font-size: clamp(3rem, 16vw, 12rem);
+          font-size: clamp(2.5rem, 16vw, 12rem);
           font-weight: 900;
           letter-spacing: -0.02em;
           background: linear-gradient(
@@ -224,21 +299,11 @@ export default function Home() {
 
         .welcome-text {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(1.5rem, 6vw, 4rem);
+          font-size: clamp(1.25rem, 6vw, 4rem);
           text-transform: uppercase;
           letter-spacing: 0.1em;
           color: #f0e6ff;
           opacity: 0.9;
-        }
-
-        .subtitle {
-          font-family: 'Space Mono', monospace;
-          font-size: clamp(0.55rem, 1.2vw, 1rem);
-          color: #9b8fbf;
-          text-align: center;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          white-space: nowrap;
         }
 
         .blink {
@@ -251,23 +316,13 @@ export default function Home() {
         }
       `}</style>
 
-      <div style={{ 
-        position: 'relative', 
-        zIndex: 10, 
-        height: '100vh', 
-        display: 'flex', 
-        flexDirection: 'column', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        padding: '1rem',
-        overflow: 'hidden'
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+      <div className="main-container">
+        <div className="welcome-section">
           <h1 className="welcome-text">Welcome to my</h1>
           <div className="junkyard-text">Junkyard</div>
         </div>
         
-        <p className="subtitle" style={{ marginBottom: '1.5rem' }}>
+        <p className="subtitle">
           Experiments, projects &amp; digital debris<span className="blink">_</span>
         </p>
 
@@ -326,11 +381,11 @@ export default function Home() {
           </div>
         </div>
 
-        <footer style={{ position: 'absolute', bottom: '0.75rem', textAlign: 'center' }}>
-          <p style={{ fontSize: '0.8rem', color: '#5a5475', fontFamily: 'Space Mono, monospace' }}>
+        <footer className="site-footer">
+          <p className="footer-text">
             Lost in the digital cosmos
           </p>
-          <p style={{ marginTop: '0.25rem', fontSize: '0.8rem', color: '#8F0177', letterSpacing: '0.2em' }}>◈ 2025 ◈</p>
+          <p className="footer-year">◈ 2025 ◈</p>
         </footer>
       </div>
     </>
