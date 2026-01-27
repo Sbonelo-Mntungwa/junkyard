@@ -385,7 +385,7 @@ export default function Home() {
           <p className="footer-text">
             Lost in the digital cosmos
           </p>
-          <p className="footer-year">◈ 2026 ◈</p>
+          <p className="footer-year">◈ 2025 ◈</p>
         </footer>
       </div>
     </>
