@@ -231,29 +231,6 @@ export default function NotFound() {
           left: 100%;
         }
 
-        .floating-elements {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-          z-index: 5;
-        }
-
-        .asteroid {
-          position: absolute;
-          font-size: 2rem;
-          animation: float 20s ease-in-out infinite;
-          opacity: 0.3;
-        }
-
-        .asteroid:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
-        .asteroid:nth-child(2) { top: 20%; right: 15%; animation-delay: 3s; }
-        .asteroid:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 6s; }
-        .asteroid:nth-child(4) { bottom: 15%; right: 10%; animation-delay: 9s; }
-        .asteroid:nth-child(5) { top: 50%; left: 5%; animation-delay: 12s; }
-
         @keyframes float {
           0%, 100% { transform: translate(0, 0) rotate(0deg); }
           25% { transform: translate(20px, -30px) rotate(90deg); }
@@ -326,14 +303,6 @@ export default function NotFound() {
       `}</style>
 
       <div className="scan-line" />
-
-      <div className="floating-elements">
-        <span className="asteroid">🪨</span>
-        <span className="asteroid">💫</span>
-        <span className="asteroid">🌑</span>
-        <span className="asteroid">☄️</span>
-        <span className="asteroid">🛸</span>
-      </div>
 
       <div className="container">
         <div className="error-code" data-text={glitchText}>

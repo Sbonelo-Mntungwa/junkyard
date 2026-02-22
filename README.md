@@ -43,8 +43,8 @@ git add .
 # Commit
 git commit -m "Initial commit"
 
-# Add remote (replace YOUR_USERNAME and REPO_NAME)
-git remote add origin https://github.com/YOUR_USERNAME/REPO_NAME.git
+# Add remote
+git remote add origin https://github.com/Sbonelo-Mntungwa/junkyard.git
 
 # Push to main branch
 git branch -M main
@@ -66,7 +66,7 @@ git push -u origin main
 3. Delete any existing A records or CNAME for @ or www
 4. Add these DNS records:
 
-**For apex domain (yourdomain.com):**
+**For apex domain (sbonelo.xyz):**
 
 | Type | Name | Value | TTL |
 |------|------|-------|-----|
@@ -79,12 +79,12 @@ git push -u origin main
 
 | Type | Name | Value | TTL |
 |------|------|-------|-----|
-| CNAME | www | YOUR_USERNAME.github.io | 600 |
+| CNAME | www | Sbonelo-Mntungwa.github.io | 600 |
 
 ### Step 5: Add Custom Domain in GitHub
 
 1. Go to repository **Settings** → **Pages**
-2. Under "Custom domain", enter your domain (e.g., `yourdomain.com`)
+2. Under "Custom domain", enter your domain (e.g., `sbonelo.xyz`)
 3. Click **Save**
 4. Wait for DNS check (can take up to 24 hours, usually 10-30 minutes)
 5. Check **Enforce HTTPS** once available
@@ -95,7 +95,7 @@ Create a file named `CNAME` (no extension) in the `public/` folder:
 
 ```bash
 mkdir -p public
-echo "yourdomain.com" > public/CNAME
+echo "sbonelo.xyz" > public/CNAME
 ```
 
 Then push to GitHub:
