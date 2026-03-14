@@ -172,6 +172,48 @@ export default function PiMonitorPage() {
           <span style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease' }}>→</span>
         </a>
 
+        {/* Notion Documentation Link */}
+        <a 
+          href="https://tungsten-bramble-977.notion.site/ebd//323b9a7f133e80309529fd19d716dd6c"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            marginTop: '1rem',
+            padding: '1rem 2rem',
+            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '50px',
+            color: 'var(--text-star)',
+            textDecoration: 'none',
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.95rem',
+            transition: 'all 0.3s ease',
+            position: 'relative',
+            overflow: 'hidden'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 10px 40px rgba(255, 255, 255, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)';
+            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style={{ flexShrink: 0 }}>
+            <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
+          </svg>
+          <span>Read Full Documentation</span>
+          <span style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease' }}>→</span>
+        </a>
+
         {/* Terminal */}
         <div style={{
           marginTop: '4rem',
@@ -218,6 +260,7 @@ export default function PiMonitorPage() {
               { num: '06', text: 'Build & Deploy Pipeline', href: '#build' },
               { num: '07', text: 'Debugging Adventures', href: '#debugging' },
               { num: '08', text: 'Key Learnings', href: '#learnings' },
+              { num: '09', text: 'Full Documentation (Notion)', href: '#documentation' },
             ].map((item) => (
               <li key={item.num} style={{
                 padding: '1rem 1.25rem',
@@ -352,7 +395,7 @@ pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuM
 
         {/* Dashboard */}
         <section id="dashboard" style={sectionStyle}>
-          <h2 style={h2Style}>Live Web Dashboard</h2>
+          <h2 style={h2Style}>📟 Live Web Dashboard</h2>
           <p style={pStyle}>
             The dashboard is a single HTML page embedded in the binary at compile time using Rust&apos;s include_str!() macro. It polls /json every 2 seconds and renders all metrics with canvas-drawn graphs and interactive modals.
           </p>
@@ -600,6 +643,73 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
           <blockquote style={{ borderLeft: '4px solid var(--accent-cosmic)', paddingLeft: '1.5rem', margin: '2rem 0', fontStyle: 'italic', color: 'var(--text-dust)', fontSize: '1.1rem' }}>
             &ldquo;The best monitoring tool is the one you understand completely — because when it breaks at 3am, you can fix it.&rdquo;
           </blockquote>
+        </section>
+
+        {/* Full Documentation */}
+        <section id="documentation" style={sectionStyle}>
+          <h2 style={h2Style}>Full Documentation</h2>
+          <p style={pStyle}>
+            Want the complete technical deep-dive? The full Pi-Monitor documentation covers every /proc file format, 
+            every Rust module line-by-line, the async architecture, dashboard design decisions, and every issue encountered with its resolution.
+          </p>
+
+          <a 
+            href="https://tungsten-bramble-977.notion.site/ebd//323b9a7f133e80309529fd19d716dd6c"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'block',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(143, 1, 119, 0.08) 100%)',
+              border: '1px solid rgba(143, 1, 119, 0.3)',
+              borderRadius: '12px',
+              padding: '2rem',
+              margin: '2rem 0',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#DE1A58';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 10px 40px rgba(143, 1, 119, 0.2)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(143, 1, 119, 0.3)';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="var(--text-star)" style={{ flexShrink: 0 }}>
+                <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
+              </svg>
+              <div>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>Pi-Monitor — Complete Technical Documentation</h3>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', margin: '0.25rem 0 0', fontFamily: 'JetBrains Mono, monospace' }}>tungsten-bramble-977.notion.site</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
+              {['/proc Parsing', 'Async Rust', 'HTTP Server', 'Dashboard Design', 'Prometheus Format', 'Grafana Setup', 'Debugging Guide', 'All Source Code'].map((tag) => (
+                <span key={tag} style={{ 
+                  background: 'rgba(143, 1, 119, 0.15)', 
+                  border: '1px solid rgba(143, 1, 119, 0.25)', 
+                  padding: '0.25rem 0.75rem', 
+                  borderRadius: '100px', 
+                  fontSize: '0.8rem', 
+                  color: 'var(--accent-cosmic)',
+                  fontFamily: 'JetBrains Mono, monospace'
+                }}>{tag}</span>
+              ))}
+            </div>
+            <p style={{ color: 'var(--text-dust)', margin: 0, fontSize: '0.95rem', lineHeight: 1.7 }}>
+              Covers how Linux exposes metrics through /proc, the CPU tick-diffing algorithm, tokio async runtime internals,
+              hyper HTTP server setup, Prometheus exposition format, compile-time asset embedding with include_str!(),
+              canvas-drawn dashboard visuals, Grafana + Prometheus integration, and every debugging issue encountered.
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.25rem', color: 'var(--accent-nova)', fontSize: '0.9rem', fontFamily: 'JetBrains Mono, monospace' }}>
+              <span>Open in Notion</span>
+              <span style={{ fontSize: '1.1rem' }}>→</span>
+            </div>
+          </a>
         </section>
       </main>
 
