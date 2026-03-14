@@ -395,7 +395,7 @@ pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuM
 
         {/* Dashboard */}
         <section id="dashboard" style={sectionStyle}>
-          <h2 style={h2Style}>📟 Live Web Dashboard</h2>
+          <h2 style={h2Style}>Live Web Dashboard</h2>
           <p style={pStyle}>
             The dashboard is a single HTML page embedded in the binary at compile time using Rust&apos;s include_str!() macro. It polls /json every 2 seconds and renders all metrics with canvas-drawn graphs and interactive modals.
           </p>
