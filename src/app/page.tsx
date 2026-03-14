@@ -358,6 +358,33 @@ export default function Home() {
             </div>
           </Link>
 
+          <Link href="/projects/pi-monitor" className="project-card featured" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>⏲</span>
+              <h3 className="card-title" style={{ 
+                fontFamily: 'Bebas Neue, sans-serif',
+                fontSize: '1.6rem',
+                marginBottom: '0.5rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                background: 'linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent'
+              }}>
+                Pi-Monitor
+              </h3>
+              <p className="card-description" style={{ fontSize: '0.9rem', color: '#9b8fbf', lineHeight: 1.5, marginBottom: '0.75rem' }}>
+                Lightweight system monitoring agent with a live dashboard &amp; Grafana integration.
+              </p>
+              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                <span className="tag">Rust</span>
+                <span className="tag">Prometheus</span>
+                <span className="tag">Grafana</span>
+              </div>
+              <span className="card-arrow">→</span>
+            </div>
+          </Link>
+
           <div className="project-card disabled">
             <div style={{ position: 'relative', zIndex: 1 }}>
               <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🌌</span>
