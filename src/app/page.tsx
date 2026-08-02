@@ -7,89 +7,154 @@ export default function Home() {
   return (
     <>
       <CosmicBackground starCount={200} shootingStarInterval={2500} />
-      
+
       <style jsx global>{`
-        .project-card {
-          position: relative;
-          background: rgba(8, 8, 12, 0.8);
-          border: 1px solid #1a1825;
-          border-radius: 12px;
-          padding: 1.5rem;
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .projects-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1rem;
+          width: 100%;
+          max-width: 780px;
         }
 
-        .project-card::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(135deg, rgba(143, 1, 119, 0.15) 0%, rgba(222, 26, 88, 0.08) 100%);
-          opacity: 0;
-          transition: opacity 0.4s ease;
+        .project-card {
+          position: relative;
+          aspect-ratio: 1 / 1;
+          border-radius: 14px;
+          border: 1px solid #1a1825;
+          background: rgba(8, 8, 12, 0.8);
+          text-decoration: none;
+          color: inherit;
+          transition: border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
         .project-card:hover {
-          transform: translateY(-8px) scale(1.02);
-          border-color: #8F0177;
-          box-shadow: 
-            0 20px 50px rgba(143, 1, 119, 0.25),
-            0 0 80px rgba(222, 26, 88, 0.1);
-        }
-
-        .project-card:hover::before {
-          opacity: 1;
+          border-color: #DE1A58;
+          box-shadow: 0 12px 36px rgba(143, 1, 119, 0.3), 0 0 50px rgba(222, 26, 88, 0.14);
+          z-index: 50;
         }
 
         .project-card.featured {
-          border: 2px solid #8F0177;
-          box-shadow: 0 0 20px rgba(143, 1, 119, 0.15);
-        }
-
-        .project-card.featured:hover {
-          border-color: #DE1A58;
-          box-shadow: 
-            0 20px 50px rgba(143, 1, 119, 0.3),
-            0 0 80px rgba(222, 26, 88, 0.15);
+          border-color: rgba(143, 1, 119, 0.55);
         }
 
         .project-card.disabled {
-          opacity: 0.5;
+          opacity: 0.4;
+        }
+
+        .project-card.disabled:hover {
+          border-color: #1a1825;
+          box-shadow: none;
+        }
+
+        /* Resting face: emoji + title */
+        .card-face {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.75rem;
+          text-align: center;
+          transition: opacity 0.25s ease;
+        }
+
+        .card-emoji {
+          font-size: 2.2rem;
+          line-height: 1;
+        }
+
+        .card-face .card-title {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.15rem;
+          line-height: 1.05;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+          background: linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .project-card:hover .card-face {
+          opacity: 0;
+        }
+
+        /* Hover pop-out: a larger floating card with logo + details */
+        .card-pop {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 272px;
+          transform: translate(-50%, -50%) scale(0.72);
+          transform-origin: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.85rem;
+          padding: 1.85rem 1.5rem;
+          border-radius: 18px;
+          text-align: center;
+          background: linear-gradient(160deg, rgba(56, 6, 66, 0.98) 0%, rgba(24, 5, 30, 0.98) 100%);
+          border: 1px solid #DE1A58;
+          box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55), 0 0 80px rgba(222, 26, 88, 0.45);
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+          z-index: 60;
+        }
+
+        .project-card:hover .card-pop {
+          opacity: 1;
+          visibility: visible;
+          transform: translate(-50%, -50%) scale(1);
+        }
+
+        .card-pop .card-emoji-lg {
+          font-size: 3rem;
+          line-height: 1;
+          filter: drop-shadow(0 4px 18px rgba(222, 26, 88, 0.5));
+        }
+
+        .card-pop .card-title-pop {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 1.9rem;
+          line-height: 1;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+          background: linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .card-pop .card-desc {
+          font-size: 0.82rem;
+          line-height: 1.45;
+          color: #d3c4f0;
+          margin: 0;
+        }
+
+        .card-tags {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.35rem;
         }
 
         .tag {
           font-family: 'Space Mono', monospace;
-          font-size: 0.7rem;
-          padding: 0.25rem 0.5rem;
+          font-size: 0.62rem;
+          padding: 0.2rem 0.5rem;
           background: rgba(143, 1, 119, 0.2);
-          border: 1px solid rgba(143, 1, 119, 0.3);
+          border: 1px solid rgba(143, 1, 119, 0.4);
           border-radius: 4px;
           color: #DE1A58;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-        }
-
-        .projects-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(220px, 320px));
-          gap: 1.5rem;
-          max-width: 700px;
-          width: 100%;
-        }
-
-        .card-description,
-        .card-tags {
-          display: block;
-        }
-
-        .card-arrow {
-          position: absolute;
-          bottom: 1.25rem;
-          right: 1.25rem;
-          font-size: 1.25rem;
-          color: #5a5475;
         }
 
         .transmissions {
@@ -104,14 +169,13 @@ export default function Home() {
         .main-container {
           position: relative;
           z-index: 10;
-          height: 100vh;
-          height: 100dvh;
+          min-height: 100vh;
+          min-height: 100dvh;
           display: flex;
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          padding: 1rem;
-          overflow: hidden;
+          padding: 3rem 1.5rem;
           box-sizing: border-box;
         }
 
@@ -132,9 +196,8 @@ export default function Home() {
         }
 
         .site-footer {
-          position: absolute;
-          bottom: 1.5rem;
           text-align: center;
+          margin-top: 2.5rem;
         }
 
         .footer-text {
@@ -150,73 +213,48 @@ export default function Home() {
           letter-spacing: 0.2em;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 820px) {
+          .projects-grid {
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 560px;
+          }
+        }
+
+        @media (max-width: 560px) {
           .main-container {
-            padding: 0.5rem;
-            justify-content: space-evenly;
+            padding: 2rem 1rem;
           }
 
           .projects-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
+            gap: 0.6rem;
             max-width: 100%;
-            padding: 0 0.25rem;
-          }
-
-          .project-card {
-            padding: 0.75rem;
-            border-radius: 8px;
           }
 
           .card-emoji {
-            font-size: 1.25rem !important;
-            margin-bottom: 0.15rem !important;
+            font-size: 1.8rem;
           }
 
-          .card-title {
-            font-size: 1rem !important;
-            margin-bottom: 0 !important;
-          }
-
-          .card-description,
-          .card-tags {
-            display: none !important;
-          }
-
-          .card-arrow {
-            position: static;
-            display: block;
-            margin-top: 0.25rem;
-            font-size: 0.9rem;
+          .card-face .card-title {
+            font-size: 1rem;
           }
 
           .transmissions {
             display: none;
           }
 
-          .welcome-section {
-            margin-bottom: 0.25rem;
-          }
-
           .subtitle {
-            margin-bottom: 0.5rem;
-            font-size: 0.45rem;
+            font-size: 0.5rem;
             letter-spacing: 0.08em;
-          }
-
-          .site-footer {
-            position: relative;
-            bottom: auto;
-            margin-top: 0.5rem;
+            margin-bottom: 1rem;
           }
 
           .footer-text {
-            font-size: 0.6rem;
+            font-size: 0.65rem;
           }
 
           .footer-year {
-            font-size: 0.6rem;
-            margin-top: 0.1rem;
+            font-size: 0.65rem;
           }
         }
       `}</style>
@@ -321,89 +359,78 @@ export default function Home() {
           <h1 className="welcome-text">Welcome to my</h1>
           <div className="junkyard-text">Junkyard</div>
         </div>
-        
+
         <p className="subtitle">
           Experiments, projects &amp; digital debris<span className="blink">_</span>
         </p>
 
-        <p className="transmissions">
-          // Transmissions from the void
-        </p>
+        {/* spacer kept where the transmissions line used to be */}
+        <p className="transmissions" aria-hidden="true">&nbsp;</p>
 
         <div className="projects-grid">
-          <Link href="/projects/rustpi" className="project-card featured" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🦀</span>
-              <h3 className="card-title" style={{ 
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontSize: '1.6rem',
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                background: 'linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                RustPi
-              </h3>
-              <p className="card-description" style={{ fontSize: '0.9rem', color: '#9b8fbf', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                Building a custom Linux distribution from scratch for Raspberry Pi.
-              </p>
-              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+          <Link href="/projects/rustpi" className="project-card featured">
+            <div className="card-face">
+              <span className="card-emoji">🦀</span>
+              <span className="card-title">RustPi</span>
+            </div>
+            <div className="card-pop">
+              <span className="card-emoji-lg">🦀</span>
+              <span className="card-title-pop">RustPi</span>
+              <p className="card-desc">Building a custom Linux distribution from scratch for Raspberry Pi.</p>
+              <div className="card-tags">
                 <span className="tag">Rust</span>
                 <span className="tag">Linux</span>
                 <span className="tag">Embedded</span>
               </div>
-              <span className="card-arrow">→</span>
             </div>
           </Link>
 
-          <Link href="/projects/pi-monitor" className="project-card featured" style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>⏲</span>
-              <h3 className="card-title" style={{ 
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontSize: '1.6rem',
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                background: 'linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                Pi-Monitor
-              </h3>
-              <p className="card-description" style={{ fontSize: '0.9rem', color: '#9b8fbf', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                Lightweight system monitoring agent with a live dashboard &amp; Grafana integration.
-              </p>
-              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+          <Link href="/projects/pi-monitor" className="project-card featured">
+            <div className="card-face">
+              <span className="card-emoji">⏲</span>
+              <span className="card-title">Pi-Monitor</span>
+            </div>
+            <div className="card-pop">
+              <span className="card-emoji-lg">⏲</span>
+              <span className="card-title-pop">Pi-Monitor</span>
+              <p className="card-desc">Lightweight system monitoring agent with a live dashboard and Grafana integration.</p>
+              <div className="card-tags">
                 <span className="tag">Rust</span>
                 <span className="tag">Prometheus</span>
                 <span className="tag">Grafana</span>
               </div>
-              <span className="card-arrow">→</span>
+            </div>
+          </Link>
+
+          <Link href="/projects/rustpi2" className="project-card featured">
+            <div className="card-face">
+              <span className="card-emoji">🐳</span>
+              <span className="card-title">RustPi 2</span>
+            </div>
+            <div className="card-pop">
+              <span className="card-emoji-lg">🐳</span>
+              <span className="card-title-pop">RustPi 2</span>
+              <p className="card-desc">Turning the bare RustPi image into an Alpine Docker host: apk bootstrap, disk resize, and containers.</p>
+              <div className="card-tags">
+                <span className="tag">Alpine</span>
+                <span className="tag">Docker</span>
+                <span className="tag">apk</span>
+              </div>
             </div>
           </Link>
 
           <div className="project-card disabled">
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <span className="card-emoji" style={{ fontSize: '2rem', marginBottom: '0.5rem', display: 'block' }}>🌌</span>
-              <h3 className="card-title" style={{ 
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontSize: '1.6rem',
-                marginBottom: '0.5rem',
-                textTransform: 'uppercase',
-                color: '#9b8fbf'
-              }}>
-                More Coming
-              </h3>
-              <p className="card-description" style={{ fontSize: '0.9rem', color: '#5a5475', lineHeight: 1.5, marginBottom: '0.75rem' }}>
-                Additional projects will materialize from the cosmic void.
-              </p>
-              <div className="card-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                <span className="tag" style={{ opacity: 0.5 }}>???</span>
+            <div className="card-face">
+              <span className="card-emoji">🌌</span>
+              <span className="card-title">More Coming</span>
+            </div>
+            <div className="card-pop">
+              <span className="card-emoji-lg">🌌</span>
+              <span className="card-title-pop">More Coming</span>
+              <p className="card-desc">Additional projects will materialize from the cosmic void.</p>
+              <div className="card-tags">
+                <span className="tag">???</span>
               </div>
-              <span className="card-arrow">⋯</span>
             </div>
           </div>
         </div>

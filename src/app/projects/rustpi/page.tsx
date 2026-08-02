@@ -538,6 +538,114 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
           </div>
         </section>
 
+        {/* Next: RustPi 2 */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>What This Became</h2>
+          <p style={pStyle}>
+            The image built here boots to a shell, but a shell is not a platform. The next chapter takes this bare distro
+            and turns it into an Alpine-based Docker host that can build and run containers.
+          </p>
+
+          <Link
+            href="/projects/rustpi2"
+            style={{
+              position: 'relative',
+              display: 'block',
+              overflow: 'hidden',
+              margin: '1.5rem 0',
+              padding: '2rem',
+              borderRadius: '16px',
+              textDecoration: 'none',
+              background: 'linear-gradient(135deg, rgba(143, 1, 119, 0.15) 0%, rgba(222, 26, 88, 0.06) 100%)',
+              border: '1px solid rgba(143, 1, 119, 0.4)',
+              transition: 'all 0.4s cubic-bezier(0.23, 1, 0.32, 1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-6px)';
+              e.currentTarget.style.borderColor = '#DE1A58';
+              e.currentTarget.style.boxShadow = '0 20px 60px rgba(143, 1, 119, 0.3), 0 0 80px rgba(222, 26, 88, 0.12)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.borderColor = 'rgba(143, 1, 119, 0.4)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
+            {/* decorative watermark */}
+            <span style={{
+              position: 'absolute',
+              top: '-1.5rem',
+              right: '0.5rem',
+              fontFamily: 'Bebas Neue, sans-serif',
+              fontSize: '9rem',
+              lineHeight: 1,
+              color: 'rgba(143, 1, 119, 0.12)',
+              pointerEvents: 'none',
+              userSelect: 'none'
+            }}>02</span>
+
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.75rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.25em',
+                color: 'var(--accent-nova)',
+                marginBottom: '1.25rem'
+              }}>
+                The next chapter &rarr;
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                <div style={{
+                  flexShrink: 0,
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '2rem',
+                  background: 'linear-gradient(135deg, #8F0177 0%, #DE1A58 100%)',
+                  boxShadow: '0 8px 24px rgba(143, 1, 119, 0.4)'
+                }}>🐳</div>
+
+                <div style={{ flex: 1 }}>
+                  <h3 style={{
+                    fontFamily: 'Bebas Neue, sans-serif',
+                    fontSize: '2rem',
+                    lineHeight: 1,
+                    letterSpacing: '0.03em',
+                    textTransform: 'uppercase',
+                    margin: 0,
+                    background: 'linear-gradient(135deg, #f0e6ff 0%, #DE1A58 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                  }}>
+                    RustPi 2: Platform Bootstrap
+                  </h3>
+                  <p style={{ color: 'var(--text-dust)', fontSize: '0.95rem', margin: '0.4rem 0 0', lineHeight: 1.5 }}>
+                    Turning the bare RustPi image into an Alpine Docker host: apk bootstrap, disk resize, and containers.
+                  </p>
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                marginTop: '1.5rem',
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: '0.9rem',
+                color: 'var(--text-star)'
+              }}>
+                <span>See what the image became</span>
+                <span style={{ color: 'var(--accent-nova)', fontSize: '1.1rem' }}>&rarr;</span>
+              </div>
+            </div>
+          </Link>
+        </section>
+
         {/* Full Documentation */}
         <section id="documentation" style={sectionStyle}>
           <h2 style={h2Style}>Full Documentation</h2>
