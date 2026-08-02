@@ -284,17 +284,17 @@ export default function PiMonitorPage() {
         <section id="overview" style={sectionStyle}>
           <h2 style={h2Style}>Project Overview</h2>
           <p style={pStyle}>
-            Pi-Monitor is a lightweight system monitoring agent written in Rust, designed to run on the same Raspberry Pi 3A+ that hosts our custom RustPi Linux distribution. It reads system metrics directly from /proc and /sys, serves them in multiple formats, and includes a built-in web dashboard — all in a single 741KB static binary.
+            Pi-Monitor is a lightweight system monitoring agent written in Rust, designed to run on the same Raspberry Pi 3A+ that hosts our custom RustPi Linux distribution. It reads system metrics directly from /proc and /sys, serves them in multiple formats, and includes a built-in web dashboard, all in a single 741KB static binary.
           </p>
           <p style={pStyle}>
-            This project is completely separate from RustPi — it has its own repository, its own build pipeline, and its own Vagrant VM. The binary is deployed via SCP and runs as a standalone process. RustPi stays untouched.
+            This project is completely separate from RustPi. It has its own repository, its own build pipeline, and its own Vagrant VM. The binary is deployed via SCP and runs as a standalone process. RustPi stays untouched.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
             {[
               { icon: '📟', title: 'Live Dashboard', desc: 'Built-in web UI with CPU graphs, memory rings, and click-to-expand modals' },
               { icon: '📊', title: 'Prometheus Native', desc: 'Standard /metrics endpoint compatible with any Prometheus scraper' },
-              { icon: '🔧', title: 'Zero Dependencies', desc: 'Single static musl binary — just SCP it to the Pi and run' },
+              { icon: '🔧', title: 'Zero Dependencies', desc: 'Single static musl binary: just SCP it to the Pi and run' },
               { icon: '📈', title: 'Grafana Ready', desc: 'Pre-built Grafana dashboard with Tron-themed aquamarine visuals' },
             ].map((card) => (
               <div key={card.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
@@ -345,9 +345,9 @@ export default function PiMonitorPage() {
             ))}
           </div>
 
-          <h3 style={h3Style}>The CPU Sampling Problem</h3>
+          <h3 style={h3Style}>The CPU sampling problem</h3>
           <p style={pStyle}>
-            Every metric except CPU is a point-in-time snapshot — read /proc/meminfo and you get current memory usage. CPU is different: /proc/stat gives cumulative tick counts since boot. To get a percentage, you need two readings separated by a time interval, compute the difference, and calculate what fraction of elapsed ticks were spent in each state.
+            Every metric except CPU is a point-in-time snapshot. Read /proc/meminfo and you get current memory usage. CPU is different: /proc/stat gives cumulative tick counts since boot. To get a percentage, you need two readings separated by a time interval, compute the difference, and calculate what fraction of elapsed ticks were spent in each state.
           </p>
           <p style={pStyle}>
             This is solved with a background tokio task that samples /proc/stat every 2 seconds and stores the computed percentages in an Arc&lt;Mutex&lt;CpuMetrics&gt;&gt;. HTTP handlers read the latest values without blocking.
@@ -377,7 +377,7 @@ export default function PiMonitorPage() {
             ))}
           </div>
 
-          <h3 style={h3Style}>CPU Usage Algorithm</h3>
+          <h3 style={h3Style}>CPU usage algorithm</h3>
           <CodeBlock language="rust">{`/// Compare two /proc/stat snapshots and compute percentages
 pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuMetrics {
     let user_diff = curr.user.saturating_sub(prev.user);
@@ -482,7 +482,7 @@ pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuM
               </div>
             </div>
           </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>Click any card to expand — modals show detailed breakdowns with larger fonts and more data</p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>Click any card to expand. Modals show detailed breakdowns with larger fonts and more data</p>
         </section>
 
         {/* Grafana */}
@@ -498,7 +498,7 @@ pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuM
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
               <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca40' }}></div>
-              <span style={{ marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#8e8ea0' }}>◆ Pi-Monitor // RustPi — Grafana</span>
+              <span style={{ marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: '#8e8ea0' }}>◆ Pi-Monitor // RustPi / Grafana</span>
             </div>
             <div style={{ background: '#0b0c10', padding: '1rem' }}>
               {/* Stat row */}
@@ -553,7 +553,7 @@ pub fn calculate_usage(prev: &[RawCpuCounters], curr: &[RawCpuCounters]) -> CpuM
             </div>
           </div>
 
-          <h3 style={h3Style}>PromQL Queries</h3>
+          <h3 style={h3Style}>PromQL queries</h3>
           <CodeBlock language="promql">{`# CPU usage (excluding idle)
 100 - pi_cpu_usage_percent{cpu="total", mode="idle"}
 
@@ -567,7 +567,7 @@ rate(pi_network_receive_bytes_total{interface="eth0"}[1m])`}</CodeBlock>
         {/* Build */}
         <section id="build" style={sectionStyle}>
           <h2 style={h2Style}>Build & Deploy Pipeline</h2>
-          <p style={pStyle}>The entire workflow is scripted — build in a Vagrant VM, deploy via SCP, auto-start on login.</p>
+          <p style={pStyle}>The entire workflow is scripted: build in a Vagrant VM, deploy via SCP, auto-start on login.</p>
 
           <CodeBlock language="bash">{`# Build the static binary (inside Vagrant VM)
 ./scripts/build.sh
@@ -579,7 +579,7 @@ PI_HOST=10.0.0.111 ./scripts/deploy.sh
 # Setup Prometheus + Grafana on Mac
 ./scripts/monitoring-setup.sh 10.0.0.111`}</CodeBlock>
 
-          <h3 style={h3Style}>Release Optimizations</h3>
+          <h3 style={h3Style}>Release optimizations</h3>
           <CodeBlock language="toml">{`[profile.release]
 opt-level = "s"      # Optimize for binary size
 lto = true           # Link-time optimization
@@ -602,19 +602,19 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
 
             <DebugItem title="Deploy Script: Password Prompted 5 Times">
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> Each SSH/SCP command in deploy.sh prompts for the password separately.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> No SSH key auth configured — each command opens a new connection.</p>
+              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> No SSH key auth configured, so each command opens a new connection.</p>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Set up SSH key authentication, or use SSH ControlMaster for connection reuse.</p>
             </DebugItem>
 
             <DebugItem title="CPU Shows 100% Idle on First Request">
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> First /metrics request shows all CPUs at 100% idle.</p>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> The CPU sampler needs TWO readings to compute a diff. The first reading has no previous to compare against.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> By design — the default state is 100% idle until the second sample (2 seconds after start).</p>
+              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> By design: the default state is 100% idle until the second sample (2 seconds after start).</p>
             </DebugItem>
 
             <DebugItem title="/etc/profile.d Doesn't Exist on RustPi">
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> <code style={{ background: 'var(--bg-tertiary)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>can&apos;t create /etc/profile.d/pi-monitor.sh: nonexistent directory</code></p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> Minimal RustPi has no profile.d directory — only a flat /etc/profile file.</p>
+              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> Minimal RustPi has no profile.d directory, only a flat /etc/profile file.</p>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Append the auto-start block directly to /etc/profile instead.</p>
             </DebugItem>
           </div>
@@ -624,24 +624,24 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
         <section id="learnings" style={sectionStyle}>
           <h2 style={h2Style}>Key Learnings</h2>
           
-          <h3 style={h3Style}>Technical Skills Gained</h3>
+          <h3 style={h3Style}>Technical skills gained</h3>
           <div style={{ margin: '1rem 0' }}>
             {['Async Rust (tokio)', 'HTTP Servers (hyper)', 'Prometheus Format', '/proc Filesystem', 'Arc<Mutex<T>>', 'musl Static Linking', 'Canvas Rendering', 'Grafana Dashboards', 'PromQL', 'Background Tasks'].map((skill) => (
               <span key={skill} style={{ display: 'inline-block', background: 'var(--bg-tertiary)', border: '1px solid var(--border-void)', padding: '0.5rem 1rem', borderRadius: '100px', fontSize: '0.9rem', color: 'var(--text-dust)', margin: '0.25rem' }}>{skill}</span>
             ))}
           </div>
 
-          <h4 style={h4Style}>1. CPU Usage Is Not Straightforward</h4>
+          <h4 style={h4Style}>1. CPU usage is not straightforward</h4>
           <p style={pStyle}>Unlike memory or disk, CPU percentage requires diffing two snapshots of cumulative counters over time. This is why every monitoring tool needs a background sampling loop.</p>
 
-          <h4 style={h4Style}>2. Separate Reading from Parsing</h4>
-          <p style={pStyle}>Every /proc parser has a read function (touches the filesystem) and a parse function (takes a string). This makes unit testing trivial — paste real Pi data into tests without needing /proc.</p>
+          <h4 style={h4Style}>2. Separate reading from parsing</h4>
+          <p style={pStyle}>Every /proc parser has a read function (touches the filesystem) and a parse function (takes a string). This makes unit testing trivial: paste real Pi data into tests without needing /proc.</p>
 
-          <h4 style={h4Style}>3. Embed Assets at Compile Time</h4>
+          <h4 style={h4Style}>3. Embed assets at compile time</h4>
           <p style={pStyle}>Using include_str!() to bake HTML/CSS/JS into the binary means zero runtime dependencies. Edit the files separately during development, get a single self-contained binary for deployment.</p>
 
           <blockquote style={{ borderLeft: '4px solid var(--accent-cosmic)', paddingLeft: '1.5rem', margin: '2rem 0', fontStyle: 'italic', color: 'var(--text-dust)', fontSize: '1.1rem' }}>
-            &ldquo;The best monitoring tool is the one you understand completely — because when it breaks at 3am, you can fix it.&rdquo;
+            &ldquo;The best monitoring tool is the one you understand completely, because when it breaks at 3am, you can fix it.&rdquo;
           </blockquote>
         </section>
 
@@ -683,7 +683,7 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
                 <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
               </svg>
               <div>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>Pi-Monitor — Complete Technical Documentation</h3>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>Pi-Monitor: Complete Technical Documentation</h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', margin: '0.25rem 0 0', fontFamily: 'JetBrains Mono, monospace' }}>tungsten-bramble-977.notion.site</p>
               </div>
             </div>
@@ -716,8 +716,8 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
         <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.5rem', marginBottom: '1rem' }}>Built with 🦀 and Curiosity</h3>
-        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Pi-Monitor: 741KB of pure Rust monitoring goodness.</p>
-        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 — Built from scratch, deployed via SCP</p>
+        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Pi-Monitor: 741KB, 5 collectors, 4 endpoints, 0 runtime dependencies.</p>
+        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from scratch, deployed via SCP</p>
       </footer>
     </div>
   );

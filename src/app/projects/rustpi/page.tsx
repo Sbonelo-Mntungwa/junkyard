@@ -258,7 +258,7 @@ export default function RustPiPage() {
           <h2 style={h2Style}>Content</h2>
           <ol style={{ listStyle: 'none', padding: 0, marginTop: '2rem' }}>
             {[
-              { num: '01', text: 'Project Overview — What We Built', href: '#overview' },
+              { num: '01', text: 'Project Overview: What We Built', href: '#overview' },
               { num: '02', text: 'Why Build Your Own Linux?', href: '#why' },
               { num: '03', text: 'System Architecture', href: '#architecture' },
               { num: '04', text: 'Core Components', href: '#components' },
@@ -291,17 +291,17 @@ export default function RustPiPage() {
           <h2 style={h2Style}>Project Overview</h2>
           <p style={pStyle}>
             RustPi is a minimal, custom-built Linux distribution designed to run on a Raspberry Pi 3 Model A+. 
-            What makes it unique is that the init system — the very first program that runs after the kernel boots — is written entirely in Rust.
+            What makes it unique is that the init system, the very first program that runs after the kernel boots, is written entirely in Rust.
           </p>
           <p style={pStyle}>
-            This project demonstrates that building your own Linux distribution, while challenging, is absolutely achievable. 
-            It&apos;s an incredible learning experience that demystifies how operating systems work at the most fundamental level.
+            Building your own Linux distribution is more approachable than it looks. Because every file on the image is placed by hand, 
+            the whole path from power-on to shell stays small enough to read end to end.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
             {[
               { icon: '🦀', title: 'Rust Init System', desc: 'Custom PID 1 process handling mounts, networking, and service management' },
-              { icon: '🐧', title: 'Minimal Linux', desc: 'Only essential components — no bloat, no unnecessary services' },
+              { icon: '🐧', title: 'Minimal Linux', desc: 'Only essential components, no bloat, no unnecessary services' },
               { icon: '🥧', title: 'Pi 3A+ Target', desc: "Built specifically for Raspberry Pi's ARM64 architecture" },
               { icon: '📦', title: '512MB Image', desc: 'Complete bootable system in half a gigabyte' },
             ].map((card) => (
@@ -313,7 +313,7 @@ export default function RustPiPage() {
             ))}
           </div>
 
-          <h3 style={h3Style}>What&apos;s Included</h3>
+          <h3 style={h3Style}>What&apos;s included</h3>
           {[
             'Custom Rust init system (PID 1) with mount handling, hostname setup, and service spawning',
             'BusyBox utilities providing 300+ common Linux commands',
@@ -334,7 +334,7 @@ export default function RustPiPage() {
           <h2 style={h2Style}>Why Build Your Own Linux?</h2>
           <p style={pStyle}>You might wonder: with hundreds of Linux distributions available, why build your own?</p>
           
-          <h3 style={h3Style}>For Engineers</h3>
+          <h3 style={h3Style}>For engineers</h3>
           <ul style={{ color: 'var(--text-dust)', lineHeight: 2, fontSize: '1.05rem' }}>
             <li><strong style={{ color: 'var(--text-star)' }}>Deep System Understanding:</strong> There&apos;s no better way to understand how Linux works than building it yourself.</li>
             <li><strong style={{ color: 'var(--text-star)' }}>Embedded Systems Skills:</strong> IoT and embedded systems require minimal, purpose-built operating systems.</li>
@@ -375,7 +375,7 @@ export default function RustPiPage() {
         <section id="components" style={sectionStyle}>
           <h2 style={h2Style}>Core Components</h2>
           
-          <h3 style={h3Style}>The Rust Init System</h3>
+          <h3 style={h3Style}>The Rust init system</h3>
           <p style={pStyle}>The init system is the heart of RustPi. As PID 1, it&apos;s the first userspace process and the parent of all others.</p>
 
           <CodeBlock language="rust">{`fn main() {
@@ -400,7 +400,7 @@ export default function RustPiPage() {
     }
 }`}</CodeBlock>
 
-          <h3 style={h3Style}>BusyBox — The Swiss Army Knife</h3>
+          <h3 style={h3Style}>BusyBox: the Swiss Army knife</h3>
           <p style={pStyle}>BusyBox provides 300+ common Unix utilities in a single ~1MB binary.</p>
 
           <CodeBlock language="bash">{`# Creating command symlinks
@@ -416,7 +416,7 @@ done`}</CodeBlock>
 
           <div style={{ margin: '2rem 0', paddingBottom: '2rem', borderBottom: '1px solid var(--border-void)' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', color: 'var(--accent-nova)', fontWeight: 600, marginBottom: '0.5rem' }}>Phase 1</div>
-            <h4 style={h4Style}>Development Environment Setup</h4>
+            <h4 style={h4Style}>Development environment setup</h4>
             <CodeBlock language="bash">{`# Install cross-compilation toolchain
 sudo apt update
 sudo apt install -y gcc-aarch64-linux-gnu build-essential git
@@ -428,7 +428,7 @@ rustup target add aarch64-unknown-linux-musl`}</CodeBlock>
 
           <div style={{ margin: '2rem 0', paddingBottom: '2rem', borderBottom: '1px solid var(--border-void)' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', color: 'var(--accent-nova)', fontWeight: 600, marginBottom: '0.5rem' }}>Phase 2-3</div>
-            <h4 style={h4Style}>Build Init & BusyBox</h4>
+            <h4 style={h4Style}>Build init & BusyBox</h4>
             <CodeBlock language="bash">{`# Build Rust init
 cargo build --release --target aarch64-unknown-linux-musl
 
@@ -440,7 +440,7 @@ make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc)`}</CodeBlock>
 
           <div style={{ margin: '2rem 0' }}>
             <div style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', color: 'var(--accent-nova)', fontWeight: 600, marginBottom: '0.5rem' }}>Phase 4-5</div>
-            <h4 style={h4Style}>Create SD Card Image</h4>
+            <h4 style={h4Style}>Create SD card image</h4>
             <CodeBlock language="bash">{`# Create 512MB image
 dd if=/dev/zero of=sdcard.img bs=1M count=512
 
@@ -485,7 +485,7 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Identify correct driver via USB vendor/product ID.</p>
             </DebugItem>
 
-            <DebugItem title="SSH Permission Denied — Nonexistent User">
+            <DebugItem title="SSH Permission Denied: Nonexistent User">
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> &ldquo;Login attempt for nonexistent user&rdquo; in logs.</p>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> File ownership - /etc/passwd was owned by UID 1000.</p>
               <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> chown 0:0 /etc/passwd /etc/shadow</p>
@@ -497,17 +497,17 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
         <section id="learnings" style={sectionStyle}>
           <h2 style={h2Style}>Key Learnings</h2>
           
-          <h3 style={h3Style}>Technical Skills Gained</h3>
+          <h3 style={h3Style}>Technical skills gained</h3>
           <div style={{ margin: '1rem 0' }}>
             {['Cross-compilation', 'ARM64 Architecture', 'Kernel Configuration', 'Device Trees', 'Init Systems', 'Static Linking', 'Boot Process', 'Network Configuration', 'SSH Server Setup', 'Rust Systems Programming'].map((skill) => (
               <span key={skill} style={{ display: 'inline-block', background: 'var(--bg-tertiary)', border: '1px solid var(--border-void)', padding: '0.5rem 1rem', borderRadius: '100px', fontSize: '0.9rem', color: 'var(--text-dust)', margin: '0.25rem' }}>{skill}</span>
             ))}
           </div>
 
-          <h4 style={h4Style}>1. Static vs Dynamic Linking</h4>
+          <h4 style={h4Style}>1. Static vs dynamic linking</h4>
           <p style={pStyle}>In minimal systems without glibc, static linking is essential. The musl libc provides a lightweight alternative.</p>
 
-          <h4 style={h4Style}>2. File Ownership is Critical</h4>
+          <h4 style={h4Style}>2. File ownership is critical</h4>
           <p style={pStyle}>When building a rootfs, files are owned by your user (UID 1000). These must be changed to root (UID 0).</p>
 
           <blockquote style={{ borderLeft: '4px solid var(--accent-cosmic)', paddingLeft: '1.5rem', margin: '2rem 0', fontStyle: 'italic', color: 'var(--text-dust)', fontSize: '1.1rem' }}>
@@ -519,18 +519,18 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
         <section id="resources" style={sectionStyle}>
           <h2 style={h2Style}>Resources & Next Steps</h2>
           
-          <h3 style={h3Style}>References Used</h3>
+          <h3 style={h3Style}>References used</h3>
           <ul style={{ color: 'var(--text-dust)', lineHeight: 2, fontSize: '1.05rem' }}>
-            <li><a href="https://github.com/raspberrypi/firmware" style={{ color: 'var(--accent-cosmic)' }}>Raspberry Pi Firmware</a> — GPU bootloader and pre-built kernels</li>
-            <li><a href="https://busybox.net/" style={{ color: 'var(--accent-cosmic)' }}>BusyBox</a> — Compact Unix utilities</li>
-            <li><a href="https://github.com/mkj/dropbear" style={{ color: 'var(--accent-cosmic)' }}>Dropbear SSH</a> — Lightweight SSH server</li>
-            <li><a href="https://docs.rs/nix" style={{ color: 'var(--accent-cosmic)' }}>nix crate</a> — Rust bindings for Unix system calls</li>
-            <li><a href="https://musl.libc.org/" style={{ color: 'var(--accent-cosmic)' }}>musl libc</a> — Lightweight C library for static linking</li>
-            <li><a href="https://tungsten-bramble-977.notion.site/ebd//2ffb9a7f133e80969c70c43fd7c8b091" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-cosmic)' }}>RustPi Full Documentation (Notion)</a> — Complete technical deep-dive with every file and function explained</li>
+            <li><a href="https://github.com/raspberrypi/firmware" style={{ color: 'var(--accent-cosmic)' }}>Raspberry Pi Firmware</a>: GPU bootloader and pre-built kernels</li>
+            <li><a href="https://busybox.net/" style={{ color: 'var(--accent-cosmic)' }}>BusyBox</a>: Compact Unix utilities</li>
+            <li><a href="https://github.com/mkj/dropbear" style={{ color: 'var(--accent-cosmic)' }}>Dropbear SSH</a>: Lightweight SSH server</li>
+            <li><a href="https://docs.rs/nix" style={{ color: 'var(--accent-cosmic)' }}>nix crate</a>: Rust bindings for Unix system calls</li>
+            <li><a href="https://musl.libc.org/" style={{ color: 'var(--accent-cosmic)' }}>musl libc</a>: Lightweight C library for static linking</li>
+            <li><a href="https://tungsten-bramble-977.notion.site/ebd//2ffb9a7f133e80969c70c43fd7c8b091" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-cosmic)' }}>RustPi Full Documentation (Notion)</a>: Complete technical deep-dive with every file and function explained</li>
           </ul>
 
           <div style={{ background: 'linear-gradient(135deg, rgba(143, 1, 119, 0.1) 0%, rgba(222, 26, 88, 0.05) 100%)', border: '1px solid rgba(222, 26, 88, 0.3)', borderRadius: '12px', padding: '1.5rem', margin: '2rem 0' }}>
-            <h4 style={{ ...h4Style, marginTop: 0 }}>💡 Pro Tip</h4>
+            <h4 style={{ ...h4Style, marginTop: 0 }}>💡 Pro tip</h4>
             <p style={{ ...pStyle, margin: 0 }}>
               Keep detailed notes of everything you try and every error you encounter. 
               This documentation becomes invaluable when you need to reproduce your work.
@@ -543,7 +543,7 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
           <h2 style={h2Style}>Full Documentation</h2>
           <p style={pStyle}>
             Want the complete technical deep-dive? The full RustPi documentation covers every file, every function, 
-            and every decision made throughout the build process — from kernel configuration to debugging SSH authentication issues.
+            and every decision made throughout the build process, from kernel configuration to debugging SSH authentication issues.
           </p>
 
           <a 
@@ -576,7 +576,7 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
                 <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
               </svg>
               <div>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>RustPi — Complete Technical Documentation</h3>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>RustPi: Complete Technical Documentation</h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', margin: '0.25rem 0 0', fontFamily: 'JetBrains Mono, monospace' }}>tungsten-bramble-977.notion.site</p>
               </div>
             </div>
@@ -609,8 +609,8 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
         <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.5rem', marginBottom: '1rem' }}>Built with 🦀 and Curiosity</h3>
-        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>RustPi demonstrates that understanding systems at a fundamental level is both achievable and rewarding.</p>
-        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2025 — Built from scratch, documented with care</p>
+        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>RustPi: a 512MB image with a Rust PID 1 that boots to SSH in about 3 seconds.</p>
+        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2025 - Built from scratch, documented with care</p>
       </footer>
     </div>
   );
