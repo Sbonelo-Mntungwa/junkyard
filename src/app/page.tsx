@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import CosmicBackground from '@/components/CosmicBackground';
+import { RustPiIcon, RustPi2Icon, PiMonitorIcon, MoreIcon } from '@/icons';
 
 export default function Home() {
   return (
@@ -28,10 +29,12 @@ export default function Home() {
           transition: border-color 0.35s ease, box-shadow 0.35s ease;
         }
 
-        .project-card:hover {
-          border-color: #DE1A58;
-          box-shadow: 0 12px 36px rgba(143, 1, 119, 0.3), 0 0 50px rgba(222, 26, 88, 0.14);
-          z-index: 50;
+        @media (hover: hover) {
+          .project-card:hover {
+            border-color: #DE1A58;
+            box-shadow: 0 12px 36px rgba(143, 1, 119, 0.3), 0 0 50px rgba(222, 26, 88, 0.14);
+            z-index: 50;
+          }
         }
 
         .project-card.featured {
@@ -61,9 +64,9 @@ export default function Home() {
           transition: opacity 0.25s ease;
         }
 
-        .card-emoji {
-          font-size: 2.2rem;
-          line-height: 1;
+        .card-face svg {
+          width: 44px;
+          height: 44px;
         }
 
         .card-face .card-title {
@@ -78,8 +81,10 @@ export default function Home() {
           background-clip: text;
         }
 
-        .project-card:hover .card-face {
-          opacity: 0;
+        @media (hover: hover) {
+          .project-card:hover .card-face {
+            opacity: 0;
+          }
         }
 
         /* Hover pop-out: a larger floating card with logo + details */
@@ -107,16 +112,18 @@ export default function Home() {
           z-index: 60;
         }
 
-        .project-card:hover .card-pop {
-          opacity: 1;
-          visibility: visible;
-          transform: translate(-50%, -50%) scale(1);
+        @media (hover: hover) {
+          .project-card:hover .card-pop {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+          }
         }
 
-        .card-pop .card-emoji-lg {
-          font-size: 3rem;
-          line-height: 1;
-          filter: drop-shadow(0 4px 18px rgba(222, 26, 88, 0.5));
+        .card-pop svg {
+          width: 62px;
+          height: 62px;
+          filter: drop-shadow(0 4px 18px rgba(222, 26, 88, 0.35));
         }
 
         .card-pop .card-title-pop {
@@ -225,18 +232,43 @@ export default function Home() {
             padding: 2rem 1rem;
           }
 
+          /* one tall card per row, full details shown (no hover on touch) */
           .projects-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
+            gap: 0.85rem;
+            max-width: 420px;
+          }
+
+          .project-card {
+            aspect-ratio: auto;
+          }
+
+          /* hide the compact face and show the full content in normal flow */
+          .card-face {
+            display: none;
+          }
+
+          .card-pop {
+            position: static;
+            transform: none;
+            width: auto;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 1.5rem 1.25rem;
             gap: 0.6rem;
-            max-width: 100%;
           }
 
-          .card-emoji {
-            font-size: 1.8rem;
+          .card-pop svg {
+            width: 46px;
+            height: 46px;
           }
 
-          .card-face .card-title {
-            font-size: 1rem;
+          .card-pop .card-title-pop {
+            font-size: 1.5rem;
           }
 
           .transmissions {
@@ -352,6 +384,12 @@ export default function Home() {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
         }
+
+        @media (max-width: 640px) {
+          .junkyard-text { animation: none; }
+          .junkyard-text::before,
+          .junkyard-text::after { display: none; }
+        }
       `}</style>
 
       <div className="main-container">
@@ -370,11 +408,11 @@ export default function Home() {
         <div className="projects-grid">
           <Link href="/projects/rustpi" className="project-card featured">
             <div className="card-face">
-              <span className="card-emoji">🦀</span>
+              <RustPiIcon size={44} />
               <span className="card-title">RustPi</span>
             </div>
             <div className="card-pop">
-              <span className="card-emoji-lg">🦀</span>
+              <RustPiIcon size={62} />
               <span className="card-title-pop">RustPi</span>
               <p className="card-desc">Building a custom Linux distribution from scratch for Raspberry Pi.</p>
               <div className="card-tags">
@@ -387,11 +425,11 @@ export default function Home() {
 
           <Link href="/projects/pi-monitor" className="project-card featured">
             <div className="card-face">
-              <span className="card-emoji">⏲</span>
+              <PiMonitorIcon size={44} />
               <span className="card-title">Pi-Monitor</span>
             </div>
             <div className="card-pop">
-              <span className="card-emoji-lg">⏲</span>
+              <PiMonitorIcon size={62} />
               <span className="card-title-pop">Pi-Monitor</span>
               <p className="card-desc">Lightweight system monitoring agent with a live dashboard and Grafana integration.</p>
               <div className="card-tags">
@@ -404,11 +442,11 @@ export default function Home() {
 
           <Link href="/projects/rustpi2" className="project-card featured">
             <div className="card-face">
-              <span className="card-emoji">🐳</span>
+              <RustPi2Icon size={44} />
               <span className="card-title">RustPi 2</span>
             </div>
             <div className="card-pop">
-              <span className="card-emoji-lg">🐳</span>
+              <RustPi2Icon size={62} />
               <span className="card-title-pop">RustPi 2</span>
               <p className="card-desc">Turning the bare RustPi image into an Alpine Docker host: apk bootstrap, disk resize, and containers.</p>
               <div className="card-tags">
@@ -421,11 +459,11 @@ export default function Home() {
 
           <div className="project-card disabled">
             <div className="card-face">
-              <span className="card-emoji">🌌</span>
+              <MoreIcon size={44} />
               <span className="card-title">More Coming</span>
             </div>
             <div className="card-pop">
-              <span className="card-emoji-lg">🌌</span>
+              <MoreIcon size={62} />
               <span className="card-title-pop">More Coming</span>
               <p className="card-desc">Additional projects will materialize from the cosmic void.</p>
               <div className="card-tags">

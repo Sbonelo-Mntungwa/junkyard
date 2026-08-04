@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { RustPiIcon, RustPi2Icon } from '@/icons';
 import CosmicBackground from '@/components/CosmicBackground';
 import DebugItem from '@/components/DebugItem';
 import CodeBlock from '@/components/CodeBlock';
@@ -75,14 +76,16 @@ export default function RustPiPage() {
           &lt; Back
         </Link>
         <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
           fontFamily: 'Bebas Neue, sans-serif',
           fontSize: '1.6rem',
           color: 'var(--accent-cosmic)',
           letterSpacing: '0.05em'
         }}>
-          <span style={{ color: 'var(--accent-nova)' }}>&gt; </span>
-          RustPi
-          <span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
+          <RustPiIcon size={24} />
+          <span>RustPi<span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span></span>
         </span>
       </header>
 
@@ -298,12 +301,12 @@ export default function RustPiPage() {
             the whole path from power-on to shell stays small enough to read end to end.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '2rem' }}>
             {[
-              { icon: '🦀', title: 'Rust Init System', desc: 'Custom PID 1 process handling mounts, networking, and service management' },
-              { icon: '🐧', title: 'Minimal Linux', desc: 'Only essential components, no bloat, no unnecessary services' },
-              { icon: '🥧', title: 'Pi 3A+ Target', desc: "Built specifically for Raspberry Pi's ARM64 architecture" },
-              { icon: '📦', title: '512MB Image', desc: 'Complete bootable system in half a gigabyte' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v8" /><path d="M6.6 6.6a8 8 0 1 0 10.8 0" /></svg>), title: 'Rust Init System', desc: 'Custom PID 1 process handling mounts, networking, and service management' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 9l3 3-3 3" /><path d="M13 15h4" /></svg>), title: 'Minimal Linux', desc: 'Only essential components, no bloat, no unnecessary services' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="7" y="7" width="10" height="10" rx="1" /><path d="M10 4v3M14 4v3M10 17v3M14 17v3M4 10h3M4 14h3M17 10h3M17 14h3" /></svg>), title: 'Pi 3A+ Target', desc: "Built specifically for Raspberry Pi's ARM64 architecture" },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v10l-8 4-8-4V7z" /><path d="M4 7l8 4 8-4M12 11v10" /></svg>), title: '512MB Image', desc: 'Complete bootable system in half a gigabyte' },
             ].map((card) => (
               <div key={card.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{card.icon}</div>
@@ -597,18 +600,7 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <div style={{
-                  flexShrink: 0,
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '2rem',
-                  background: 'linear-gradient(135deg, #8F0177 0%, #DE1A58 100%)',
-                  boxShadow: '0 8px 24px rgba(143, 1, 119, 0.4)'
-                }}>🐳</div>
+                <RustPi2Icon size={56} />
 
                 <div style={{ flex: 1 }}>
                   <h3 style={{
@@ -716,7 +708,6 @@ sudo dd if=sdcard.img of=/dev/rdisk4 bs=4m status=progress`}</CodeBlock>
 
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
-        <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.5rem', marginBottom: '1rem' }}>Built with 🦀 and Curiosity</h3>
         <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>RustPi: a 512MB image with a Rust PID 1 that boots to SSH in about 3 seconds.</p>
         <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2025 - Built from scratch, documented with care</p>
       </footer>

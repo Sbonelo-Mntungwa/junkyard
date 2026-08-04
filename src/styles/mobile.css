@@ -1,0 +1,109 @@
+/* mobile.css
+   Responsive + smoothness pass for the Junkyard site.
+   Import ONCE in the root layout, AFTER globals.css so it can win:
+     import './globals.css';
+     import './mobile.css';
+   (Adjust the path to wherever you drop this file.)
+
+   Note: the project pages are styled inline, which media queries cannot
+   override directly. These rules reach them by structure (semantic tags)
+   and with !important where they must beat an inline style. The hero
+   <section> lives OUTSIDE <main>, so the "main section" rules only touch
+   the content sections, never the hero. */
+
+/* 1. Never allow sideways scroll or off-screen overlap ---------------- */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Media and code can never blow out the layout --------------------- */
+svg,
+img,
+video,
+canvas {
+  max-width: 100%;
+}
+
+pre {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 3. Honour the OS "reduce motion" setting (also calms phones) --------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 4. Utility classes -------------------------------------------------- */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .mobile-hidden {
+    display: none !important;
+  }
+  .mobile-only {
+    display: block;
+  }
+  .scroll-x {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* 5. Phones: tighten the project pages so everything fits ------------- */
+@media (max-width: 640px) {
+  header {
+    padding: 0.9rem 1rem !important;
+  }
+
+  main {
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+  }
+
+  /* content sections only (hero is outside <main>) */
+  main section {
+    padding: 3rem 0 !important;
+  }
+
+  /* big Bebas section titles: scale down so they never overflow */
+  main h2 {
+    font-size: 2.1rem !important;
+  }
+
+  /* code blocks: smaller and scrollable. Keep the top room so the code never
+     slides under CodeBlock's copy button; just tighten the sides. */
+  pre {
+    font-size: 0.72rem !important;
+    padding: 2.75rem 1rem 1.25rem !important;
+  }
+
+  footer {
+    padding: 3rem 1rem !important;
+  }
+}
+
+/* 6. Very small phones (Galaxy S22, ~360px CSS width) ----------------- */
+@media (max-width: 380px) {
+  main h2 {
+    font-size: 1.9rem !important;
+  }
+}

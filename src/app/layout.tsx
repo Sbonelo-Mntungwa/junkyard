@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import '@/styles/globals.css'
+import '@/styles/mobile.css';
 import LoadingScreen from '@/components/LoadingScreen'
 
 export const metadata: Metadata = {

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { PiMonitorIcon } from '@/icons';
 import CosmicBackground from '@/components/CosmicBackground';
 import DebugItem from '@/components/DebugItem';
 import CodeBlock from '@/components/CodeBlock';
@@ -75,14 +76,16 @@ export default function PiMonitorPage() {
           &lt; Back
         </Link>
         <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
           fontFamily: 'Bebas Neue, sans-serif',
           fontSize: '1.6rem',
           color: 'var(--accent-cosmic)',
           letterSpacing: '0.05em'
         }}>
-          <span style={{ color: 'var(--accent-nova)' }}>⏲ </span>
-          Pi-Monitor
-          <span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
+          <PiMonitorIcon size={24} />
+          <span>Pi-Monitor<span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span></span>
         </span>
       </header>
 
@@ -290,12 +293,12 @@ export default function PiMonitorPage() {
             This project is completely separate from RustPi. It has its own repository, its own build pipeline, and its own Vagrant VM. The binary is deployed via SCP and runs as a standalone process. RustPi stays untouched.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '2rem' }}>
             {[
-              { icon: '📟', title: 'Live Dashboard', desc: 'Built-in web UI with CPU graphs, memory rings, and click-to-expand modals' },
-              { icon: '📊', title: 'Prometheus Native', desc: 'Standard /metrics endpoint compatible with any Prometheus scraper' },
-              { icon: '🔧', title: 'Zero Dependencies', desc: 'Single static musl binary: just SCP it to the Pi and run' },
-              { icon: '📈', title: 'Grafana Ready', desc: 'Pre-built Grafana dashboard with Tron-themed aquamarine visuals' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18M10 9v11" /></svg>), title: 'Live Dashboard', desc: 'Built-in web UI with CPU graphs, memory rings, and click-to-expand modals' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h16" /><path d="M8 20v-6M12 20v-10M16 20v-4" /></svg>), title: 'Prometheus Native', desc: 'Standard /metrics endpoint compatible with any Prometheus scraper' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8" /><path d="M6.5 6.5l11 11" /></svg>), title: 'Zero Dependencies', desc: 'Single static musl binary: just SCP it to the Pi and run' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h16" /><path d="M4 15l4-4 3 3 5-6 4 4" /></svg>), title: 'Grafana Ready', desc: 'Pre-built Grafana dashboard with Tron-themed aquamarine visuals' },
             ].map((card) => (
               <div key={card.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{card.icon}</div>
@@ -715,7 +718,6 @@ panic = "abort"      # No unwinding machinery`}</CodeBlock>
 
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
-        <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.5rem', marginBottom: '1rem' }}>Built with 🦀 and Curiosity</h3>
         <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Pi-Monitor: 741KB, 5 collectors, 4 endpoints, 0 runtime dependencies.</p>
         <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from scratch, deployed via SCP</p>
       </footer>

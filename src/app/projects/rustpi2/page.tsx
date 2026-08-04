@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { RustPi2Icon, RustPiIcon } from '@/icons';
 import CosmicBackground from '@/components/CosmicBackground';
 import DebugItem from '@/components/DebugItem';
 import CodeBlock from '@/components/CodeBlock';
@@ -75,14 +76,16 @@ export default function RustPiPart2Page() {
           &lt; Back
         </Link>
         <span style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.45rem',
           fontFamily: 'Bebas Neue, sans-serif',
           fontSize: '1.6rem',
           color: 'var(--accent-cosmic)',
           letterSpacing: '0.05em'
         }}>
-          <span style={{ color: 'var(--accent-nova)' }}>&gt; </span>
-          RustPi 2
-          <span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span>
+          <RustPi2Icon size={24} />
+          <span>RustPi 2<span style={{ color: 'var(--accent-nova)', animation: 'cursorBlink 1s step-end infinite' }}>_</span></span>
         </span>
       </header>
 
@@ -357,18 +360,7 @@ export default function RustPiPart2Page() {
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <div style={{
-                  flexShrink: 0,
-                  width: '60px',
-                  height: '60px',
-                  borderRadius: '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '2rem',
-                  background: 'linear-gradient(135deg, #8F0177 0%, #DE1A58 100%)',
-                  boxShadow: '0 8px 24px rgba(143, 1, 119, 0.4)'
-                }}>🦀</div>
+                <RustPiIcon size={56} />
 
                 <div style={{ flex: 1 }}>
                   <h3 style={{
@@ -468,12 +460,12 @@ export default function RustPiPart2Page() {
             ))}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '2rem' }}>
             {[
-              { icon: '📦', title: 'apk from scratch', desc: 'Fetched apk-tools-static over TLS by IP, stripped the HTTP headers, installed a working package manager' },
-              { icon: '🕒', title: 'Clock before TLS', desc: 'ntpd runs before any HTTPS apk call, because a 1970 clock fails every certificate check' },
-              { icon: '💽', title: 'Full-size root', desc: 'Recreated p2 at the same start sector, then grew ext4 online with resize2fs' },
-              { icon: '🐳', title: 'Docker host', desc: 'cgroup2 mounted, IPv4 forwarding on, dockerd up, running Compose stacks' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l8 4v10l-8 4-8-4V7z" /><path d="M4 7l8 4 8-4M12 11v10" /></svg>), title: 'apk from scratch', desc: 'Fetched apk-tools-static over TLS by IP, stripped the HTTP headers, installed a working package manager' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></svg>), title: 'Clock before TLS', desc: 'ntpd runs before any HTTPS apk call, because a 1970 clock fails every certificate check' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="8" rx="2" /><path d="M7 12h6" /><circle cx="17" cy="12" r="1" fill="#DE1A58" stroke="none" /></svg>), title: 'Full-size root', desc: 'Recreated p2 at the same start sector, then grew ext4 online with resize2fs' },
+              { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="13" width="16" height="7" rx="1" /><path d="M9 13v7M13 13v7M17 13v7" /><rect x="9" y="8" width="6" height="5" rx="1" /></svg>), title: 'Docker host', desc: 'cgroup2 mounted, IPv4 forwarding on, dockerd up, running Compose stacks' },
             ].map((card) => (
               <div key={card.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
                 <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{card.icon}</div>
@@ -833,7 +825,6 @@ dockerd &                               # 4. start Docker daemon`}</CodeBlock>
 
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
-        <h3 style={{ fontFamily: 'Bebas Neue, sans-serif', fontSize: '1.5rem', marginBottom: '1rem' }}>Built with 🦀 and Curiosity</h3>
         <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>RustPi 2: BusyBox to Alpine, apk bootstrapped over raw TLS, root grown to fill the card, Docker up.</p>
         <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from scratch, documented with care</p>
       </footer>
