@@ -1,11 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { MarkOneIcon } from '@/icons';
+import { MarkOneIcon, RustPiIcon } from '@/icons';
 import CosmicBackground from '@/components/CosmicBackground';
 import DebugItem from '@/components/DebugItem';
 import CodeBlock from '@/components/CodeBlock';
 import BackToTop from '@/components/BackToTop';
+import Screenshot, { ScreenshotTabs } from '@/components/Screenshot';
+
+const img = (name: string) => `/projects/mark-one/${name}.jpg`;
 
 export default function MarkOnePage() {
   const sectionStyle = {
@@ -45,20 +48,40 @@ export default function MarkOnePage() {
   };
 
   const codeStyle = { background: 'var(--bg-tertiary)', padding: '0.2rem 0.5rem', borderRadius: '4px' };
+  const strong = { color: 'var(--text-star)' };
 
-  const shot = (src: string, alt: string, caption: string) => (
-    <>
-      <div style={{ margin: '2rem 0 0.75rem', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-void)', boxShadow: '0 20px 80px rgba(0,0,0,0.5)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-void)' }}>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
-          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca40' }}></div>
-          <span style={{ marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-dim)' }}>http://127.0.0.1:7878</span>
+  const quoteStyle = {
+    borderLeft: '4px solid var(--accent-cosmic)',
+    paddingLeft: '1.5rem',
+    margin: '2rem 0',
+    fontStyle: 'italic' as const,
+    color: 'var(--text-dust)',
+    fontSize: '1.1rem'
+  };
+
+  const rows = (items: { key: string; desc: string }[], keyWidth = '110px') => (
+    <div style={{ margin: '1rem 0' }}>
+      {items.map((k) => (
+        <div key={k.key} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
+          <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)', minWidth: keyWidth, textAlign: 'center' }}>{k.key}</code>
+          <span style={{ color: 'var(--text-dust)', fontSize: '1.05rem' }}>{k.desc}</span>
         </div>
-        <img src={src} alt={alt} style={{ display: 'block', width: '100%', height: 'auto', background: '#050b14' }} />
-      </div>
-      <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace', marginBottom: '2rem' }}>{caption}</p>
-    </>
+      ))}
+    </div>
+  );
+
+  const cards = (items: { title: string; sub: string; desc: string }[]) => (
+    <div style={{ margin: '2rem 0' }}>
+      {items.map((m) => (
+        <div key={m.title} style={{ display: 'flex', gap: '1rem', margin: '1rem 0', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-void)' }}>
+          <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: 'var(--accent-aurora)', minWidth: '140px' }}>{m.sub}</code>
+          <div>
+            <div style={{ fontWeight: 600, color: 'var(--text-star)', marginBottom: '0.25rem' }}>{m.title}</div>
+            <div style={{ color: 'var(--text-dust)', fontSize: '0.95rem' }}>{m.desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 
   return (
@@ -132,8 +155,9 @@ export default function MarkOnePage() {
             WebkitTextFillColor: 'transparent'
           }}>Computer</span> from Transistors Up
         </h1>
-        <p style={{ fontSize: '1.25rem', maxWidth: '42rem', color: 'var(--text-dust)' }}>
-          A game that takes you from a live wire to NAND gates, adders, memory, a CPU and programs running on the computer you built, on a switch-level circuit engine written in Rust
+        <p style={{ fontSize: '1.25rem', maxWidth: '44rem', color: 'var(--text-dust)' }}>
+          A playable web app: wire NMOS and PMOS transistors into gates, gates into an 8-bit CPU, then write the program that makes
+          it print 42. Every Mark runs on a switch-level circuit engine written in Rust
         </p>
 
         <div style={{ display: 'flex', gap: '3rem', marginTop: '3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -234,33 +258,13 @@ export default function MarkOnePage() {
           <span style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease' }}>→</span>
         </a>
 
-        {/* Terminal */}
-        <div style={{
-          marginTop: '4rem',
-          width: '100%',
-          maxWidth: '42rem',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          background: 'var(--bg-code)',
-          border: '1px solid var(--border-void)',
-          boxShadow: '0 20px 80px rgba(0,0,0,0.5)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-void)' }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca40' }}></div>
-          </div>
-          <div style={{ padding: '1.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem', textAlign: 'left' }}>
-            <div style={{ color: 'var(--accent-nova)' }}>$ cargo test --release --workspace</div>
-            <div style={{ color: 'var(--text-dim)' }}>     Running tests/exploits.rs</div>
-            <div style={{ color: 'var(--text-dust)' }}>test result: <span style={{ color: 'var(--accent-green)' }}>ok</span>. <span style={{ color: 'var(--accent-aurora)' }}>5</span> passed; 0 failed</div>
-            <div style={{ color: 'var(--text-dim)' }}>     Running tests/solutions.rs</div>
-            <div style={{ color: 'var(--text-dust)' }}>test result: <span style={{ color: 'var(--accent-green)' }}>ok</span>. <span style={{ color: 'var(--accent-aurora)' }}>10</span> passed; 0 failed</div>
-            <div style={{ color: 'var(--text-dim)' }}>...</div>
-            <div style={{ color: 'var(--accent-nova)', marginTop: '0.5rem' }}>$ cargo run --release</div>
-            <div style={{ color: 'var(--text-dust)' }}>Mark One running at <span style={{ color: 'var(--accent-aurora)' }}>http://127.0.0.1:7878</span></div>
-            <div><span style={{ color: 'var(--accent-green)' }}>$</span> <span style={{ animation: 'cursorBlink 1s step-end infinite' }}>_</span></div>
-          </div>
+        {/* Live app */}
+        <div style={{ width: '100%', maxWidth: '64rem', marginTop: '2rem', textAlign: 'left' }}>
+          <Screenshot
+            src={img('program-42-display')}
+            alt="Mk 38: a program typed into the ROM of the hand-wired computer, with the DISPLAY showing 42"
+            caption="Mk 38, The answer: LDI 15, ADI 15, ADI 12, OUT, HLT, running on the computer built in Mk 37. The display reads 42 (00101010)"
+          />
         </div>
       </section>
 
@@ -273,15 +277,21 @@ export default function MarkOnePage() {
           <ol style={{ listStyle: 'none', padding: 0, marginTop: '2rem' }}>
             {[
               { num: '01', text: 'Project Overview', href: '#overview' },
-              { num: '02', text: 'How to Play', href: '#play' },
-              { num: '03', text: 'The 42 Marks', href: '#marks' },
-              { num: '04', text: 'Simulating Transistors', href: '#engine' },
-              { num: '05', text: 'Timing & Analysis', href: '#timing' },
-              { num: '06', text: 'The Instruction Set', href: '#isa' },
-              { num: '07', text: 'Build & Run', href: '#build' },
-              { num: '08', text: 'Debugging Adventures', href: '#debugging' },
-              { num: '09', text: 'Key Learnings', href: '#learnings' },
-              { num: '10', text: 'Full Documentation (Notion)', href: '#documentation' },
+              { num: '02', text: 'A Running Application', href: '#app' },
+              { num: '03', text: 'A Tour of the Workbench', href: '#tour' },
+              { num: '04', text: 'Lessons & the Databank', href: '#lessons' },
+              { num: '05', text: 'Building on the Board', href: '#board' },
+              { num: '06', text: 'Diagnostics', href: '#diagnostics' },
+              { num: '07', text: 'The 42 Marks', href: '#marks' },
+              { num: '08', text: 'Simulating Transistors', href: '#engine' },
+              { num: '09', text: 'Clocks, Waveforms & Timing', href: '#timing' },
+              { num: '10', text: 'The Computer You Built', href: '#computer' },
+              { num: '11', text: 'Experiment & Analysis', href: '#experiment' },
+              { num: '12', text: 'Printing Schematics', href: '#print' },
+              { num: '13', text: 'Build & Run', href: '#build' },
+              { num: '14', text: 'Debugging Adventures', href: '#debugging' },
+              { num: '15', text: 'Key Learnings', href: '#learnings' },
+              { num: '16', text: 'Full Documentation (Notion)', href: '#documentation' },
             ].map((item) => (
               <li key={item.num} style={{
                 padding: '1rem 1.25rem',
@@ -310,12 +320,18 @@ export default function MarkOnePage() {
             programs you wrote for it.
           </p>
           <p style={pStyle}>
-            Underneath the game is a real circuit engine written in Rust. Transistors are simulated at switch level, every finished part is
-            checked against a reference model before it unlocks the next Mark, and the whole thing ships as one binary with the web view
-            embedded at build time.
+            Each of the 42 steps is a Mark. A Mark is only fabricated once your circuit passes diagnostics, and from then on it sits in the
+            fabricator as a chip you can place in every later Mark. By Mk 37 the parts bin holds a CPU you wired yourself, and Mk 38 to 41
+            are programs for it.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginTop: '2rem' }}>
+          <Screenshot
+            src={img('reactor-41-fabricated')}
+            alt="The Mark One boot screen with 41 of 42 reactor segments lit"
+            caption="The boot screen after a playthrough. One reactor segment per Mark: 42 Marks on file, 41 fabricated"
+          />
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
             {[
               { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h5M15 12h5" /><path d="M9 6v12" /><path d="M12 8v8" /><path d="M12 8h3v-4M12 16h3v4" /></svg>), title: 'Switch-level Transistors', desc: 'NMOS and PMOS simulated as switches with signal strength, floating nets and leaking charge' },
               { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4v-4h4v-4h4V8h4V4" /></svg>), title: '42 Marks', desc: 'A course from a live wire to software, each Mark gated by diagnostics' },
@@ -332,13 +348,12 @@ export default function MarkOnePage() {
 
           <h3 style={h3Style}>What&apos;s included</h3>
           {[
-            'Missions: 42 Marks, each checked by diagnostics before it unlocks the next',
-            'Experiment: build anything from unlocked parts and save designs as components',
+            'Missions: 42 Marks, each with a lesson card, a live spec table and a Databank history note',
+            'Experiment: build anything from unlocked parts, name your pins and save designs as components',
             'Waveform: probe wires and watch them as timing traces, export to VCD',
-            'Test benches: expected input/output rows, rerun after every change',
-            'Equivalence: prove two designs behave the same',
-            'Debugger: step, breakpoints, live registers and RAM',
-            'Print: schematic sheets with standard gate symbols and a bill of materials',
+            'Test benches, truth tables, equivalence proofs and critical-path timing on any design',
+            'A program editor and debugger: assembly, breakpoints, live PC, ACC and RAM',
+            'Export to Verilog and KiCad, and print any board as a schematic with a bill of materials',
           ].map((item, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
               <span style={{ flexShrink: 0, width: '24px', height: '24px', background: 'var(--accent-green)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.8rem' }}>✓</span>
@@ -347,57 +362,205 @@ export default function MarkOnePage() {
           ))}
         </section>
 
-        {/* How to Play */}
-        <section id="play" style={sectionStyle}>
-          <h2 style={h2Style}>How to Play</h2>
-          <p style={pStyle}>Every Mark follows the same loop:</p>
-
-          <div style={{ margin: '2rem 0' }}>
-            {[
-              { step: '01', title: 'Pick a Mark', desc: 'A one-card lesson explains the component, never how to build it' },
-              { step: '02', title: 'Place and wire', desc: 'Drop parts from the fabricator at the bottom, then click pin to pin to wire them' },
-              { step: '03', title: 'Test it live', desc: 'Toggle inputs and pulse the clock. Gold wires carry 1, steel wires carry 0' },
-              { step: '04', title: 'Run diagnostics', desc: 'Press D. A pass turns your circuit into a chip in the fabricator for every later Mark' },
-            ].map((s) => (
-              <div key={s.step} style={{ display: 'flex', gap: '1rem', margin: '1rem 0', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-void)' }}>
-                <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: 'var(--accent-aurora)', minWidth: '40px' }}>{s.step}</code>
-                <div>
-                  <div style={{ fontWeight: 600, color: 'var(--text-star)', marginBottom: '0.25rem' }}>{s.title}</div>
-                  <div style={{ color: 'var(--text-dust)', fontSize: '0.95rem' }}>{s.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {shot('/projects/mark-one/mission.jpg', 'Mark 4: a CMOS NAND gate built from four transistors, with diagnostics passed', 'Mk 4: a CMOS NAND from two PMOS in parallel and two NMOS in series. 4 checks passed, NOR unlocked')}
-
+        {/* Running app */}
+        <section id="app" style={sectionStyle}>
+          <h2 style={h2Style}>A Running Application</h2>
           <p style={pStyle}>
-            Experiment, under Bench in the left panel, is free build: anything you have unlocked, with your own pins, test benches,
-            equivalence checks, timing and export. Designs saved there become components you can place like any library chip.
+            RustPi was terminal work from start to finish: kernel configs, <code style={codeStyle}>dd</code> to an SD card, and a serial
+            console that either printed <code style={codeStyle}>rustpi#</code> or a kernel panic. Its only interface was a shell prompt.
+          </p>
+          <p style={pStyle}>
+            Mark One is the opposite. It is an interactive application you play in a browser: you drag parts onto a board, click pin to pin to
+            wire them, toggle inputs and watch gold current move through the wires as the engine settles. The Rust underneath never
+            prints to a terminal during play. It answers JSON requests from the UI.
           </p>
 
-          <h3 style={h3Style}>Controls</h3>
-          <div style={{ margin: '1rem 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', margin: '2rem 0' }}>
             {[
-              { key: 'D', desc: 'Run diagnostics' },
-              { key: 'Space', desc: 'Pulse the clock' },
-              { key: 'K', desc: 'Change the clock speed' },
-              { key: 'H', desc: 'Run to HLT or a breakpoint' },
-              { key: 'A', desc: 'Probe a wire' },
-              { key: 'W', desc: 'Show the waveform' },
-              { key: 'T', desc: 'Timing mode' },
-              { key: 'R', desc: 'Rotate the selected part' },
-              { key: 'Del', desc: 'Delete the selected part' },
-              { key: 'P', desc: 'Print the schematic' },
-              { key: 'X', desc: 'Reset the simulation' },
-              { key: 'C', desc: 'Clear the board' },
-            ].map((k) => (
-              <div key={k.key} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
-                <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)', minWidth: '110px', textAlign: 'center' }}>{k.key}</code>
-                <span style={{ color: 'var(--text-dust)', fontSize: '1.05rem' }}>{k.desc}</span>
+              { icon: <RustPiIcon size={34} />, title: 'RustPi', lines: ['Interface: serial console and SSH', 'Output: boot logs', 'Feedback loop: rebuild, re-flash, reboot', 'Proof it works: a shell prompt'] },
+              { icon: <MarkOneIcon size={34} />, title: 'Mark One', lines: ['Interface: a browser workbench', 'Output: live boards, waveforms, schematics', 'Feedback loop: every click re-simulates', 'Proof it works: a display that reads 42'] },
+            ].map((c) => (
+              <div key={c.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                  {c.icon}
+                  <h4 style={{ fontSize: '1.2rem', fontWeight: 600, margin: 0, color: 'var(--text-star)' }}>{c.title}</h4>
+                </div>
+                {c.lines.map((l) => (
+                  <p key={l} style={{ fontSize: '0.95rem', margin: '0.4rem 0', color: 'var(--text-dust)' }}>{l}</p>
+                ))}
               </div>
             ))}
           </div>
+
+          <h3 style={h3Style}>How a click becomes a simulation</h3>
+          <div style={{ margin: '2rem 0', padding: '1.5rem', borderRadius: '12px', background: 'var(--bg-secondary)', border: '1px solid var(--border-void)' }}>
+            {[
+              { name: 'Workbench UI', tech: 'web/: plain ES modules, no framework' },
+              { name: 'JSON API', tech: 'axum on 127.0.0.1:7878, 15 routes' },
+              { name: 'Course', tech: '42 Marks, benches, diagnostics' },
+              { name: 'Engine', tech: 'switch-level sim, models, analysis' },
+              { name: 'Save file', tech: 'mark_one_save.json' },
+            ].map((layer, i, arr) => (
+              <div key={layer.name}>
+                <div style={{ background: 'var(--bg-tertiary)', border: '1px solid var(--border-void)', borderRadius: '8px', padding: '1rem 1.5rem', margin: '0.5rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontWeight: 600, color: 'var(--text-star)', fontSize: '1.05rem' }}>{layer.name}</span>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', color: 'var(--accent-cosmic)', background: 'rgba(143, 1, 119, 0.15)', padding: '0.25rem 0.75rem', borderRadius: '4px' }}>{layer.tech}</span>
+                </div>
+                {i < arr.length - 1 && <div style={{ textAlign: 'center', fontSize: '1.5rem', color: 'var(--text-dim)' }}>↓</div>}
+              </div>
+            ))}
+          </div>
+
+          <p style={pStyle}>Every UI action maps to one of these routes:</p>
+          {rows([
+            { key: 'POST /api/sim', desc: 'Settle the board and return every net value for the wires' },
+            { key: 'POST /api/levels/{id}/verify', desc: 'Run a Mark’s diagnostics and return pass, or the failing step' },
+            { key: 'POST /api/table', desc: 'Truth table for the current design' },
+            { key: 'POST /api/bench', desc: 'Run a written test bench' },
+            { key: 'POST /api/equiv', desc: 'Prove two designs equivalent' },
+            { key: 'POST /api/timing', desc: 'Critical path in gate delays' },
+            { key: 'POST /api/export', desc: 'Verilog or KiCad netlist' },
+            { key: 'POST /api/custom', desc: 'Save a design as a reusable component' },
+          ], '250px')}
+        </section>
+
+        {/* Tour */}
+        <section id="tour" style={sectionStyle}>
+          <h2 style={h2Style}>A Tour of the Workbench</h2>
+          <p style={pStyle}>A brand-new save opens on Mk 1 with almost everything locked:</p>
+
+          <Screenshot
+            src={img('fresh-start-locked')}
+            alt="Mk 1 Live wire on a new save, with the Marks list locked and only VCC and GND in the fabricator"
+            caption="A fresh save: 0 of 42 Marks fabricated, Components 0/34, and only VCC and GND in the fabricator"
+          />
+
+          {cards([
+            { sub: 'Top left', title: 'Brand mark and progress', desc: 'The reactor fills one segment per fabricated Mark, next to the count "0 of 42 Marks fabricated"' },
+            { sub: 'Left panel', title: 'Experiment and Missions', desc: 'Bench (free build), Parts (the component library), then every Mark grouped by chapter. Locked Marks are dimmed' },
+            { sub: 'Centre', title: 'The board', desc: 'Drag the floor to pan, scroll to zoom, F to recenter. Board flags like "Output floating: nothing drives it" appear at the top' },
+            { sub: 'Bottom', title: 'Fabricator and help bar', desc: 'Click a part to place it. It only holds what you have unlocked. The help bar lists the keys for the current mode' },
+            { sub: 'Right panel', title: 'Mission, Spec, Databank', desc: 'The task, a live spec table with a match/off column per row, and a short history note for the Mark' },
+          ])}
+
+          <h3 style={h3Style}>The component library</h3>
+          <p style={pStyle}>
+            Parts opens the library. On a new save every card is locked and says which Mark unlocks it. After a playthrough all 34 library
+            chips are open, and designs you saved from Experiment appear under &ldquo;Your components&rdquo; with their transistor count.
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'New save', src: img('library-locked'), alt: 'The Components dialog on a new save, with every chip locked', caption: '"0 of 34 unlocked through Missions": cards read "Locked: pass Mk 3" through "Locked: pass Mk 14"' },
+            { label: 'After a playthrough', src: img('library-custom-component'), alt: 'The Components dialog with all chips unlocked and a custom Gate adder component', caption: '"34 of 34 unlocked through Missions", plus GADD "Gate adder" (50 transistors) saved from Experiment' },
+          ]} />
+
+          <h3 style={h3Style}>On a phone</h3>
+          <p style={pStyle}>
+            Below 820px the layout stacks: the board on top, a fabricator that scrolls sideways, then Mission, Spec and Databank, with the
+            help bar pinned to the bottom.
+          </p>
+          <Screenshot phone src={img('mobile-nand')} alt="Mk 4 NAND at phone width" caption="Mk 4 NAND at 390px wide" />
+        </section>
+
+        {/* Lessons */}
+        <section id="lessons" style={sectionStyle}>
+          <h2 style={h2Style}>Lessons & the Databank</h2>
+          <p style={pStyle}>
+            Every Mark opens with a one-card lesson. The rule for writing them was strict: explain the component, never how to build it.
+            Each card says so itself: &ldquo;The mission panel has your task. Working out how to build it is up to you.&rdquo;
+          </p>
+          <p style={pStyle}>
+            The right half of each card is an interactive demo you can click, not a picture. Mk 1 animates charge moving along a rail, Mk 3 lets
+            you toggle the gate of an NMOS and a PMOS and watch each one switch between open and conducting, and later cards let you poke
+            the finished component before you build it. Press L to reopen the lesson at any time.
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'Mk 1: Charge', src: img('lesson-mk1-charge'), alt: 'The Mk 1 lesson card, Charge is information', caption: '"Charge is information": a wire that something drives is either charged (1) or drained (0)' },
+            { label: 'Mk 3: The MOSFET', src: img('lesson-mk3-mosfet'), alt: 'The Mk 3 lesson card with an interactive NMOS and PMOS demo', caption: '"The circle on the PMOS gate means "inverted": it conducts on 0." Both gates are clickable' },
+            { label: 'Mk 36: The CPU', src: img('lesson-mk36-cpu'), alt: 'The Mk 36 lesson card, One instruction per clock, with the instruction table', caption: '"One instruction per clock": a single-cycle CPU commits every register on the rising edge' },
+          ]} />
+
+          <h3 style={h3Style}>The Databank</h3>
+          <p style={pStyle}>
+            Under the spec sits a Databank note for every Mark, a few sentences of real history tied to the part you are building. Mk 4
+            NAND gets &ldquo;One gate to rule them all&rdquo;, on Henry Sheffer showing in 1913 that NAND alone can express all of Boolean
+            logic. Mk 5 NOR gets &ldquo;Apollo flew on NOR&rdquo;, and Mk 6 AND gets Claude Shannon&apos;s 1937 master&apos;s thesis on relay
+            circuits. Mk 38, whose mission is to print 42, gets Deep Thought.
+          </p>
+        </section>
+
+        {/* Board */}
+        <section id="board" style={sectionStyle}>
+          <h2 style={h2Style}>Building on the Board</h2>
+          <p style={pStyle}>Every Mark follows the same loop:</p>
+
+          {cards([
+            { sub: '01', title: 'Read the mission', desc: 'The right panel states the task and lists the pins, e.g. A, B and Y' },
+            { sub: '02', title: 'Place and wire', desc: 'Click a part in the fabricator to place it, then click pin to pin to wire it. R rotates, Del deletes' },
+            { sub: '03', title: 'Test it live', desc: 'Click an input to toggle it. The board re-simulates on every change: gold wires carry 1, steel wires carry 0' },
+            { sub: '04', title: 'Run diagnostics', desc: 'Press D. A pass fabricates the part and unlocks the next Mark' },
+          ])}
+
+          <p style={pStyle}>
+            The board reports problems before you ever run diagnostics. Half-way through wiring a NOR, the output is still disconnected for
+            these inputs and the flag at the top says so:
+          </p>
+
+          <Screenshot
+            src={img('nor-midbuild-live-wires')}
+            alt="Mk 5 NOR half-wired from two PMOS and two NMOS, with B set to 1"
+            caption="Mk 5 NOR mid-build with B = 1. Gold wires carry 1, steel carry 0, and Y is floating"
+          />
+
+          <p style={pStyle}>Those flags come straight from the four-valued engine:</p>
+          {rows([
+            { key: 'floating', desc: '"Output floating: nothing drives it"' },
+            { key: 'degraded', desc: '"Output degraded: driven only through a pass transistor"' },
+            { key: 'short', desc: '"Short circuit: a line is driven to 1 and 0 at once". The offending net turns red' },
+          ])}
+
+          <p style={pStyle}>Finish the pull-up and pull-down networks and the Live column reads match on every row:</p>
+
+          <Screenshot
+            src={img('diag-pass-nor-unlock')}
+            alt="Mk 5 NOR finished and passing diagnostics, with Mk 6 AND unlocked"
+            caption='"4 checks passed. NOR is now a chip in the fabricator. Mk 6, AND, is unlocked in the Marks list."'
+          />
+        </section>
+
+        {/* Diagnostics */}
+        <section id="diagnostics" style={sectionStyle}>
+          <h2 style={h2Style}>Diagnostics</h2>
+          <p style={pStyle}>
+            Diagnostics drive your circuit through the Mark&apos;s test bench and compare every step with a reference model. The size of
+            the bench grows with the Mark: NOR is 4 checks, the D flip-flop is 236 steps, and the full computer in Mk 37 is 1,536 checks.
+            Every Mark also has a reference solution in <code style={codeStyle}>crates/course/tests/solutions.rs</code> that must pass, so
+            no Mark can ship impossible.
+          </p>
+          <p style={pStyle}>
+            A failure stops at the first wrong step and shows the inputs, the expected output, what your circuit produced and a reason. A
+            &ldquo;Load these inputs on the board&rdquo; button puts the failing inputs on your board so you can watch it go wrong.
+            Sequential Marks also print the last few steps as a trace. These three failures were captured from real attempts:
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'Degraded output', src: img('diag-fail-degraded'), alt: 'Mk 6 AND from two transistors failing with a degraded output', caption: 'Mk 6: a two-transistor AND. "Failed at step 1 of 4". Expected Y = 0, got Y = X' },
+            { label: 'Short circuit', src: img('diag-fail-short'), alt: 'Mk 20 D flip-flop failing with a short circuit, the shorted net drawn red', caption: 'Mk 20: two chip outputs on one net. "Failed at step 1 of 236". Follow the red line' },
+            { label: 'Race condition', src: img('diag-fail-race'), alt: 'Mk 20 glitch flip-flop failing because it only works in one evaluation order', caption: 'Mk 20: a latch enabled by AND(CLK, NOT CLK). "Failed at step 7 of 236". Expected Q = 1, got Q = 0' },
+          ]} />
+
+          <p style={pStyle}>The reason text on each one is written to teach, not just to reject:</p>
+          <CodeBlock language="text">{`Degraded output. An NMOS passes 1 only up to about VDD minus its
+threshold voltage, and a PMOS passes 0 only down to about its
+threshold. Real logic restores levels with a complementary stage.
+
+Short circuit. Current would flow straight from supply to ground
+and cook the chip. Follow the red line.
+
+Passes only when chips are evaluated in one particular order: the
+design depends on a race or a glitch, which real gate delays make
+unreliable.`}</CodeBlock>
         </section>
 
         {/* Marks */}
@@ -407,7 +570,7 @@ export default function MarkOnePage() {
 
           <div style={{ margin: '2rem 0', padding: '1.5rem', borderRadius: '12px', background: 'var(--bg-secondary)', border: '1px solid var(--border-void)' }}>
             {[
-              { name: 'Software', marks: 'Mk 38-42', tech: 'Programs, then a free workshop' },
+              { name: 'Software', marks: 'Mk 38-42', tech: 'The answer, Countdown, Powers of two, Times table, Workshop' },
               { name: 'The CPU', marks: 'Mk 35-37', tech: 'Control unit, CPU, the computer' },
               { name: 'Memory Banks', marks: 'Mk 31-34', tech: '2 to 16 bytes of RAM' },
               { name: 'Counting & Decoding', marks: 'Mk 25-30', tech: 'Incrementer, PC, decoders' },
@@ -427,31 +590,18 @@ export default function MarkOnePage() {
             ))}
           </div>
 
-          <h3 style={h3Style}>Diagnostics gate every Mark</h3>
+          <h3 style={h3Style}>From transistors to chips</h3>
           <p style={pStyle}>
-            Each Mark drives your circuit through a test bench and compares every step with a reference model. Sequential Marks keep a
-            history of recent steps, and the CPU and computer Marks run whole test programs for a fixed number of cycles. Every Mark also
-            has a reference solution in <code style={codeStyle}>crates/course/tests/solutions.rs</code> that must pass, so no Mark can ship
-            impossible.
+            Only Mk 3 to 5 are built from raw transistors. From Mk 6 on, the fabricator offers the gates you already proved, and each
+            chapter climbs a level: half adders become a full adder, adders and flippers become an ALU, and by Mk 36 the board is a CPU
+            made of a control unit, program counter, registers, RAM and the ALU.
           </p>
 
-          <h3 style={h3Style}>Three crates and a view</h3>
-          <div style={{ margin: '2rem 0' }}>
-            {[
-              { path: 'crates/engine', name: 'mark-one-engine', desc: 'Simulator, component models, analysis (truth tables, benches, equivalence, timing) and Verilog/KiCad export' },
-              { path: 'crates/course', name: 'mark-one-course', desc: 'The 42 Marks, their test benches, diagnostics and saved progress' },
-              { path: 'crates/server', name: 'mark-one', desc: 'The binary: axum JSON API on port 7878 plus the embedded web view' },
-              { path: 'web/', name: 'the view', desc: 'Plain ES modules and CSS, no framework and no front-end build step' },
-            ].map((m) => (
-              <div key={m.path} style={{ display: 'flex', gap: '1rem', margin: '1rem 0', padding: '1rem', background: 'var(--bg-secondary)', borderRadius: '8px', border: '1px solid var(--border-void)' }}>
-                <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.85rem', color: 'var(--accent-aurora)', minWidth: '140px' }}>{m.path}</code>
-                <div>
-                  <div style={{ fontWeight: 600, color: 'var(--text-star)', marginBottom: '0.25rem' }}>{m.name}</div>
-                  <div style={{ color: 'var(--text-dust)', fontSize: '0.95rem' }}>{m.desc}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ScreenshotTabs shots={[
+            { label: 'Mk 11 Full adder', src: img('full-adder-chips-live'), alt: 'Mk 11 Full adder built from two half adders and an OR', caption: 'Two HA chips and an OR. A = 1, B = 0, CIN = 1 gives S = 0, COUT = 1' },
+            { label: 'Mk 17 ALU', src: img('alu-subtract-live'), alt: 'Mk 17 Arithmetic logic unit from FLIP8, ADD8 and ZERO8 doing a subtraction', caption: 'FLIP8, ADD8 and ZERO8. SUB = 1 turns A + B into A - B: 5 - 3 = 2' },
+            { label: 'Mk 36 CPU', src: img('cpu-board'), alt: 'Mk 36 Central processing unit wired from library chips', caption: 'CTRL, PC4, two REG8, RAM16, ALU8, ZERO8, two MUX8 and a NOT, wired into a CPU' },
+          ]} />
         </section>
 
         {/* Engine */}
@@ -499,73 +649,77 @@ pub(super) fn merge(a: Sig, b: Sig, short: &mut bool) -> Sig {
 
           <h3 style={h3Style}>Strength and charge</h3>
           <p style={pStyle}>
-            Two physical effects matter for a game about real circuits. An NMOS passes 0 well and 1 badly: a 1 that reaches a net only
-            through an NMOS arrives about one threshold voltage short of the rail, and the same is true of a 0 through a PMOS. The solver
-            marks such nets <strong style={{ color: 'var(--text-star)' }}>degraded</strong>. An undriven group keeps its stored charge but
-            counts as floating, and that charge survives <code style={codeStyle}>CHARGE_SETTLES = 8</code> settles before it leaks to X, so
-            dynamic storage has to be refreshed.
+            An NMOS passes 0 well and 1 badly: a 1 that reaches a net only through an NMOS arrives about one threshold voltage short of the
+            rail, and the same is true of a 0 through a PMOS. The solver marks such nets <strong style={strong}>degraded</strong>, which is
+            the flag you saw on the two-transistor AND. An undriven group keeps its stored charge but counts as floating, and that charge
+            survives <code style={codeStyle}>CHARGE_SETTLES = 8</code> settles before it leaks to X, so dynamic storage has to be refreshed.
           </p>
 
           <h3 style={h3Style}>Chips once proven</h3>
           <p style={pStyle}>
             Simulating every transistor all the way up would make the CPU crawl. Once a Mark passes, its part runs as a directional
             behavioural model evaluated in Gauss-Seidel order until nothing changes, capped at 200 sweeps. The CPU model stands for 11,998
-            transistors and still simulates instantly, and every model has its own unit tests in{' '}
+            transistors and still re-simulates on every click, and every model has its own unit tests in{' '}
             <code style={codeStyle}>crates/engine/src/components</code>.
           </p>
         </section>
 
         {/* Timing */}
         <section id="timing" style={sectionStyle}>
-          <h2 style={h2Style}>Timing & Analysis</h2>
+          <h2 style={h2Style}>Clocks, Waveforms & Timing</h2>
+          <p style={pStyle}>
+            From the Memory chapter on, circuits have a clock. Space pulses it once, K cycles it through off, 1, 4 and 12 Hz, and A puts a
+            probe on any wire so it shows up in the waveform panel under the board. The waveform exports to VCD for GTKWave.
+          </p>
+
+          <Screenshot
+            src={img('dff-waveform')}
+            alt="Mk 20 D flip-flop with probes on D, CLK and Q after a series of clock pulses"
+            caption="Mk 20 D flip-flop after 47 steps: Q only changes on a rising CLK edge, whatever D does in between"
+          />
+
+          <h3 style={h3Style}>Timing mode</h3>
           <p style={pStyle}>
             The default simulator is zero-delay: it checks what a circuit computes, not when. Press T and the board switches to an
             event-driven simulator where a chip&apos;s outputs change its delay after its inputs do, and a transistor&apos;s channel responds
             one unit after its gate.
           </p>
 
-          {shot('/projects/mark-one/timing-glitch.jpg', 'Timing mode: a selector built from gates glitches when SEL falls, shown in the waveform', 'A selector built from NOT and three NANDs. The NOT path is one gate slower, so Y dips when SEL falls')}
+          <Screenshot
+            src={img('timing-glitch')}
+            alt="Timing mode: a selector built from NOT and three NANDs glitches when SEL falls"
+            caption="Mk 9 Selector in timing mode with A = B = 1. The NOT path is one gate slower, so Y dips every time SEL falls"
+          />
 
           <p style={pStyle}>
             Delays are inertial, as in Verilog: a pulse shorter than a chip&apos;s delay never reaches its output, but one at least that long
             does, so static hazards from unequal path delays show up in the waveform marked <code style={codeStyle}>glitch</code>.
-            Edge-triggered chips are also checked for setup violations: a data input that changes within{' '}
-            <code style={codeStyle}>SETUP = 1</code> unit of the clock edge is reported, because real hardware might take either value or
-            go metastable. A run that still has events pending after <code style={codeStyle}>HORIZON = 5000</code> units is treated as
-            oscillating.
+            Edge-triggered chips are checked for setup violations: a data input that changes within <code style={codeStyle}>SETUP = 1</code>{' '}
+            unit of the clock edge is reported, because real hardware might take either value or go metastable. A run with events still
+            pending after <code style={codeStyle}>HORIZON = 5000</code> units is treated as oscillating. Diagnostics always run zero-delay,
+            so timing mode is for looking, not grading.
           </p>
-
-          <h3 style={h3Style}>Benches, equivalence and export</h3>
-          <p style={pStyle}>
-            The Analysis panel has five tabs: Table generates a full truth table, Bench reruns your expected rows after every change,
-            Equiv proves two designs behave the same, Timing finds the critical path, and Export writes Verilog or a KiCad netlist. The
-            Verilog for every library chip is checked against the engine by simulating it in Icarus Verilog during{' '}
-            <code style={codeStyle}>cargo test</code>.
-          </p>
-
-          <CodeBlock language="text">{`# 2-to-1 selector: Y = SEL ? B : A
-A B SEL | Y
-0 0 0   | 0
-1 0 0   | 1
-0 1 0   | 0
-1 1 0   | 1
-0 0 1   | 0
-1 0 1   | 0`}</CodeBlock>
-
-          <p style={pStyle}>Press P and any board prints as a schematic sheet with standard gate symbols and a bill of materials:</p>
-
-          <div style={{ margin: '2rem 0 0.75rem', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-void)', boxShadow: '0 20px 80px rgba(0,0,0,0.5)', background: '#ffffff' }}>
-            <img src="/projects/mark-one/schematic.png" alt="A printed schematic of a full adder with standard gate symbols" style={{ display: 'block', width: '100%', height: 'auto' }} />
-          </div>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace' }}>A full adder from two XOR, two AND and one OR: 10 parts, 12 wires, 50 transistors</p>
         </section>
 
-        {/* ISA */}
-        <section id="isa" style={sectionStyle}>
-          <h2 style={h2Style}>The Instruction Set</h2>
+        {/* Computer */}
+        <section id="computer" style={sectionStyle}>
+          <h2 style={h2Style}>The Computer You Built</h2>
           <p style={pStyle}>
-            The CPU you build in Mk 36 is deliberately small: one byte per instruction, opcode in the high 4 bits and operand n in the low
-            4. There are 16 bytes of ROM, 16 bytes of RAM and one 8-bit accumulator.
+            Mk 37 puts it all together: the CPU from Mk 36, a ROM, a clock and eight outputs. I wired this one by hand in the UI, 30
+            connections from ROM to CPU to the outputs and a DISPLAY, and it passed all 1,536 checks. From then on the computer is copied
+            onto every Software Mark automatically.
+          </p>
+
+          <Screenshot
+            src={img('computer-hand-wired-pass')}
+            alt="Mk 37 The computer, hand-wired, passing diagnostics"
+            caption='"1536 checks passed. Mk 38, The answer, is unlocked in the Marks list."'
+          />
+
+          <h3 style={h3Style}>The instruction set</h3>
+          <p style={pStyle}>
+            One byte per instruction, opcode in the high 4 bits and operand n in the low 4. There are 16 bytes of ROM, 16 bytes of RAM and
+            one 8-bit accumulator.
           </p>
 
           <div style={{ margin: '2rem 0', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.5rem' }}>
@@ -590,20 +744,83 @@ A B SEL | Y
             ))}
           </div>
 
-          <h3 style={h3Style}>A first program</h3>
+          <h3 style={h3Style}>Writing programs</h3>
           <p style={pStyle}>
-            Select a ROM on the board to write assembly. Labels end with a colon and comments start with a semicolon. This is the program
-            the Verilog export test runs on both the engine and Icarus Verilog:
+            Select the ROM and the right panel becomes a program editor. Labels end with a colon and comments start with a semicolon.
+            &ldquo;Load into ROM&rdquo; (or Ctrl+Enter) assembles it, the listing shows each byte, and H runs the computer until it halts.
+            Mk 38&apos;s mission is to output 42 with operands that only go up to 15:
           </p>
 
-          <CodeBlock language="asm">{`LDI 5    ; 15   ACC = 5
-ADI 7    ; 27   ACC = 12
-STA 2    ; 62   RAM[2] = 12
-ADD 2    ; 32   ACC = 24
-OUT      ; 90   OUT = 24
-HLT      ; F0`}</CodeBlock>
+          <CodeBlock language="asm">{`; 15 + 15 + 12 = 42
+LDI 15    ; 00: 1F
+ADI 15    ; 01: 2F
+ADI 12    ; 02: 2C
+OUT       ; 03: 90
+HLT       ; 04: F0`}</CodeBlock>
 
-          {shot('/projects/mark-one/debugger.jpg', 'The program debugger stopped at a breakpoint, showing PC, ACC and RAM', 'Ran 4 cycles and stopped at the breakpoint on address 4: ACC = 24 (0x18), RAM[2] = 0C')}
+          <p style={pStyle}>
+            The log answers: &ldquo;Ran 4 cycles and halted. Output matched on your computer, in 4 cycles.&rdquo; The program runs on the board
+            you wired in Mk 37, through the same simulator as every other Mark, not on a separate emulator of the instruction set.
+          </p>
+
+          <h3 style={h3Style}>The debugger</h3>
+          <p style={pStyle}>
+            Click an address in the listing to set a breakpoint. Step runs one instruction, Run stops before the breakpointed one executes,
+            and the panel shows PC, ACC, OUT and all 16 RAM bytes, highlighting whatever just changed.
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'Mk 39 Countdown', src: img('debugger-breakpoint'), alt: 'The debugger stopped at a breakpoint in the countdown loop', caption: '"Stopped at the breakpoint on address 5." Next: 05: 40 SUB 0, with PC = 5, ACC = 6 and the display at 6' },
+            { label: 'Mk 41 Times table', src: img('program-times-table'), alt: 'The times table program halted with the display showing 70', caption: '"Ran 74 cycles and halted." Mk 42, Workshop, unlocks with 41 of 42 Marks fabricated' },
+          ]} />
+        </section>
+
+        {/* Experiment */}
+        <section id="experiment" style={sectionStyle}>
+          <h2 style={h2Style}>Experiment & Analysis</h2>
+          <p style={pStyle}>
+            Bench in the left panel is free build. You get every part you have unlocked, double-click a pin to rename it, and keep named
+            designs with New and Delete. To test the analysis tools I built a full adder out of gates (two XOR, two AND and one OR), called
+            it &ldquo;Gate adder&rdquo; and ran it through every tab:
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'Table', src: img('analysis-table'), alt: 'The Table tab after generating a truth table', caption: '"8 rows. Every output is fully driven on every row, in either evaluation order."' },
+            { label: 'Bench', src: img('analysis-bench'), alt: 'The Bench tab with all 8 rows passing', caption: 'A written bench, "A B CIN | S COUT", filled with Full table: "All 8 rows pass"' },
+            { label: 'Equiv', src: img('analysis-equiv'), alt: 'The Equiv tab proving the gate adder equivalent to the library full adder', caption: 'Against the library FA chip: "Equivalent (proved)" on all 8 input combinations, in both evaluation orders' },
+            { label: 'Timing', src: img('analysis-timing'), alt: 'The Timing tab showing an 8 gate delay critical path', caption: '"Critical path: 8 gate delays". XOR @4 → AND @6 → OR @8' },
+            { label: 'Export', src: img('analysis-export-verilog'), alt: 'The Export tab with the Verilog for the gate adder', caption: '"Exported Gate_adder.v." One module per library chip, wired by net name' },
+          ]} />
+
+          <p style={pStyle}>The Verilog is real and simulates in Icarus Verilog. An excerpt of the export:</p>
+          <CodeBlock language="verilog">{`// Gate adder: exported from Mark One.
+module Gate_adder (
+  ...
+  m1_xor u_p1nzk (.A(n0), .B(n1), .Y(n5));
+  ...
+  m1_or u_p1nzo (.A(n6), .B(n7), .Y(n4));
+  assign COUT = n4;
+endmodule`}</CodeBlock>
+
+          <p style={pStyle}>
+            The KiCad export writes a netlist that starts <code style={codeStyle}>(export (version &quot;E&quot;) (design (source &quot;Gate adder&quot;) (tool &quot;Mark One&quot;)</code>.
+            Save as component turns the design into a chip in the fabricator: the gate adder became GADD, at 50 transistors.
+          </p>
+        </section>
+
+        {/* Print */}
+        <section id="print" style={sectionStyle}>
+          <h2 style={h2Style}>Printing Schematics</h2>
+          <p style={pStyle}>
+            P turns any board into a printable schematic sheet: a title block with transistor, part and wire counts, the circuit redrawn with
+            standard symbols and reference designators, a bill of materials and the spec table. Transistor Marks are drawn as CMOS
+            schematics, chip Marks with gate symbols or labelled blocks.
+          </p>
+
+          <ScreenshotTabs shots={[
+            { label: 'Mk 4 NAND', src: img('print-nand'), alt: 'Print view of the Mk 4 NAND as a CMOS schematic', caption: 'Q1 and Q2 PMOS, Q3 and Q4 NMOS: 4 transistors, 9 parts, 11 wires' },
+            { label: 'Mk 11 Full adder', src: img('print-full-adder'), alt: 'Print view of the Mk 11 full adder with a bill of materials', caption: 'U1 and U2 HA (22 transistors each) and U3 OR (6): 50 transistors in total' },
+          ]} />
         </section>
 
         {/* Build */}
@@ -611,7 +828,7 @@ HLT      ; F0`}</CodeBlock>
           <h2 style={h2Style}>Build & Run</h2>
           <p style={pStyle}>Rust 1.85 or newer, then:</p>
 
-          <CodeBlock language="bash">{`# Build and run
+          <CodeBlock language="bash">{`# Build and run, then open http://127.0.0.1:7878
 cargo run --release
 # Mark One running at http://127.0.0.1:7878  (save file: mark_one_save.json)
 
@@ -621,24 +838,37 @@ cargo test --release --workspace
 # Optional: lets the Verilog export tests run
 brew install icarus-verilog`}</CodeBlock>
 
-          <div style={{ margin: '1rem 0' }}>
-            {[
-              { path: 'PORT', desc: 'HTTP port (default 7878)' },
-              { path: 'MARK_ONE_SAVE', desc: 'Progress, drafts and designs (default mark_one_save.json)' },
-              { path: 'UNLOCK_ALL', desc: 'Set to 1 to open every Mark and chip' },
-            ].map((ep) => (
-              <div key={ep.path} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
-                <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)' }}>{ep.path}</code>
-                <span style={{ color: 'var(--text-dust)', fontSize: '1.05rem' }}>{ep.desc}</span>
-              </div>
-            ))}
-          </div>
+          {rows([
+            { key: 'PORT', desc: 'HTTP port (default 7878)' },
+            { key: 'MARK_ONE_SAVE', desc: 'Progress, drafts and designs (default mark_one_save.json)' },
+            { key: 'UNLOCK_ALL', desc: 'Set to 1 to open every Mark and chip' },
+          ], '160px')}
+
+          <h3 style={h3Style}>Controls</h3>
+          {rows([
+            { key: 'D', desc: 'Run diagnostics' },
+            { key: 'Space', desc: 'Pulse the clock' },
+            { key: 'K', desc: 'Change the clock speed' },
+            { key: 'H', desc: 'Run to HLT or a breakpoint' },
+            { key: 'A', desc: 'Probe a wire' },
+            { key: 'W', desc: 'Show the waveform' },
+            { key: 'T', desc: 'Timing mode' },
+            { key: 'R', desc: 'Rotate the selected part' },
+            { key: 'Shift+R', desc: 'Rotate the other way' },
+            { key: 'Del', desc: 'Delete the selected part' },
+            { key: 'F', desc: 'Recenter the board' },
+            { key: 'L', desc: 'Reopen the lesson' },
+            { key: 'P', desc: 'Print the schematic' },
+            { key: 'X', desc: 'Reset the simulation' },
+            { key: 'C', desc: 'Clear the board' },
+            { key: '[', desc: 'Hide the left panel' },
+          ])}
 
           <h3 style={h3Style}>One binary</h3>
           <p style={pStyle}>
             The server&apos;s <code style={codeStyle}>build.rs</code> walks <code style={codeStyle}>web/</code>, skips dotfiles, and generates
             an <code style={codeStyle}>assets.rs</code> that embeds every HTML, CSS and JS file with its MIME type. The release binary is
-            3.1MB and needs nothing else to run.
+            3.1MB and needs nothing else to run: no Node, no bundler, no front-end build step.
           </p>
 
           <CodeBlock language="rust">{`//! Embeds every file under \`web/\` into the binary, so the server is one
@@ -664,33 +894,33 @@ fn mime(p: &Path) -> &'static str {
 
           <div style={{ marginTop: '2rem' }}>
             <DebugItem title="Two-Transistor AND Passed Diagnostics" defaultOpen={true}>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> An AND gate made of one NMOS and one PMOS passed Mk 6 with a correct truth table. A real CMOS AND needs six.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> The NMOS passes B to Y when A = 1, which gives a weak 1, and the PMOS pulls Y to GND when A = 0, which gives a weak 0. The logic was right and the voltages were not.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Track strength in the switch solver and fail any degraded output: <code style={codeStyle}>An output is degraded: it is driven only through a transistor that passes that value weakly</code></p>
+              <p style={pStyle}><strong style={strong}>Symptom:</strong> An AND gate made of one NMOS and one PMOS passed Mk 6 with a correct truth table. A real CMOS AND needs six.</p>
+              <p style={pStyle}><strong style={strong}>Cause:</strong> The NMOS passes B to Y when A = 1, which gives a weak 1, and the PMOS pulls Y to GND when A = 0, which gives a weak 0. The logic was right and the voltages were not.</p>
+              <p style={pStyle}><strong style={strong}>Solution:</strong> Track strength in the switch solver and fail any degraded output: <code style={codeStyle}>An output is degraded: it is driven only through a transistor that passes that value weakly</code></p>
             </DebugItem>
 
             <DebugItem title="Pass-Transistor Selector Passed">
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> A 2-to-1 selector from two transistors passed Mk 9.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> An NMOS passes B when SEL = 1 and a PMOS passes A when SEL = 0. Each one passes half its values weakly.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Caught by the same degraded check. The message tells you to drive outputs from a complementary pull-up and pull-down.</p>
+              <p style={pStyle}><strong style={strong}>Symptom:</strong> A 2-to-1 selector from two transistors passed Mk 9.</p>
+              <p style={pStyle}><strong style={strong}>Cause:</strong> An NMOS passes B when SEL = 1 and a PMOS passes A when SEL = 0. Each one passes half its values weakly.</p>
+              <p style={pStyle}><strong style={strong}>Solution:</strong> Caught by the same degraded check. The message tells you to drive outputs from a complementary pull-up and pull-down.</p>
             </DebugItem>
 
             <DebugItem title="Dynamic Latch Held Its Value Forever">
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> A D latch built as D, then one NMOS gated by E, then two inverters, passed with no feedback keeper.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> While E = 0 the node between the pass transistor and the inverters is undriven, and the engine kept its stored charge indefinitely. Real charge leaks.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Count settles each net spends undriven and leak it to X after <code style={codeStyle}>CHARGE_SETTLES = 8</code>: <code style={codeStyle}>An output is unknown (X): conflicting drivers, an unconnected input upstream, or stored charge that has leaked away.</code></p>
+              <p style={pStyle}><strong style={strong}>Symptom:</strong> A D latch built as D, then one NMOS gated by E, then two inverters, passed with no feedback keeper.</p>
+              <p style={pStyle}><strong style={strong}>Cause:</strong> While E = 0 the node between the pass transistor and the inverters is undriven, and the engine kept its stored charge indefinitely. Real charge leaks.</p>
+              <p style={pStyle}><strong style={strong}>Solution:</strong> Count settles each net spends undriven and leak it to X after <code style={codeStyle}>CHARGE_SETTLES = 8</code>: <code style={codeStyle}>An output is unknown (X): conflicting drivers, an unconnected input upstream, or stored charge that has leaked away.</code></p>
             </DebugItem>
 
             <DebugItem title="Glitch Flip-Flop Passed in One Order">
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> A flip-flop made from a D latch enabled by AND(CLK, NOT CLK) passed Mk 20.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> That AND is always 0 in a real circuit. It only produced a zero-width pulse because the parts were placed AND, latch, NOT, so the zero-delay simulator happened to evaluate them in an order that caught it.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Run every bench twice, chips first to last and then last to first, and fail any design that only passes one way: <code style={codeStyle}>Passes only when chips are evaluated in one particular order</code></p>
+              <p style={pStyle}><strong style={strong}>Symptom:</strong> A flip-flop made from a D latch enabled by AND(CLK, NOT CLK) passed Mk 20.</p>
+              <p style={pStyle}><strong style={strong}>Cause:</strong> That AND is always 0 in a real circuit. It only produced a zero-width pulse because the parts were placed AND, latch, NOT, so the zero-delay simulator happened to evaluate them in an order that caught it.</p>
+              <p style={pStyle}><strong style={strong}>Solution:</strong> Run every bench twice, chips first to last and then last to first, and fail any design that only passes one way. This is the &ldquo;Race condition&rdquo; capture in the Diagnostics section: <code style={codeStyle}>Passes only when chips are evaluated in one particular order</code></p>
             </DebugItem>
 
             <DebugItem title="Source-Follower Buffer on the NOT Board">
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Symptom:</strong> An NMOS from VCC and a PMOS to GND, both gated by A, wired to Mk 3&apos;s inverter pins.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Cause:</strong> Both transistors are the wrong way round for their rails, so Y follows A weakly instead of inverting it.</p>
-              <p style={pStyle}><strong style={{ color: 'var(--text-star)' }}>Solution:</strong> Kept as a regression test so the degraded and wrong-value checks keep rejecting it.</p>
+              <p style={pStyle}><strong style={strong}>Symptom:</strong> An NMOS from VCC and a PMOS to GND, both gated by A, wired to Mk 3&apos;s inverter pins.</p>
+              <p style={pStyle}><strong style={strong}>Cause:</strong> Both transistors are the wrong way round for their rails, so Y follows A weakly instead of inverting it.</p>
+              <p style={pStyle}><strong style={strong}>Solution:</strong> Kept as a regression test so the degraded and wrong-value checks keep rejecting it.</p>
             </DebugItem>
           </div>
         </section>
@@ -701,7 +931,7 @@ fn mime(p: &Path) -> &'static str {
 
           <h3 style={h3Style}>Technical skills gained</h3>
           <div style={{ margin: '1rem 0' }}>
-            {['CMOS Logic', 'Switch-level Simulation', 'Four-valued Logic', 'Union-Find', 'Event-driven Simulation', 'Static Hazards', 'Setup Timing', 'CPU Design', 'Verilog', 'KiCad Netlists', 'axum', 'build.rs Codegen'].map((skill) => (
+            {['CMOS Logic', 'Switch-level Simulation', 'Four-valued Logic', 'Union-Find', 'Event-driven Simulation', 'Static Hazards', 'Setup Timing', 'CPU Design', 'Assemblers', 'Verilog', 'KiCad Netlists', 'axum', 'Interactive UI Design', 'build.rs Codegen'].map((skill) => (
               <span key={skill} style={{ display: 'inline-block', background: 'var(--bg-tertiary)', border: '1px solid var(--border-void)', padding: '0.5rem 1rem', borderRadius: '100px', fontSize: '0.9rem', color: 'var(--text-dust)', margin: '0.25rem' }}>{skill}</span>
             ))}
           </div>
@@ -713,9 +943,12 @@ fn mime(p: &Path) -> &'static str {
           <p style={pStyle}>With no delays, the order chips are evaluated in decides what a glitch does. Running every bench in both orders costs one extra pass and catches designs that rely on luck.</p>
 
           <h4 style={h4Style}>3. Prove it once, then model it</h4>
-          <p style={pStyle}>NOT, NAND and NOR are proved from transistors, and every later part runs as a tested model. That is what lets an 11,998-transistor CPU step at the speed of a click.</p>
+          <p style={pStyle}>NOT, NAND and NOR are proved from transistors, and every later part runs as a tested model. That is what lets an 11,998-transistor CPU re-simulate on every click.</p>
 
-          <blockquote style={{ borderLeft: '4px solid var(--accent-cosmic)', paddingLeft: '1.5rem', margin: '2rem 0', fontStyle: 'italic', color: 'var(--text-dust)', fontSize: '1.1rem' }}>
+          <h4 style={h4Style}>4. An error message is part of the lesson</h4>
+          <p style={pStyle}>&ldquo;Wrong value&rdquo; teaches nothing. Saying that a line is driven to 1 and 0 at once, drawing it red and offering to load the failing inputs onto the board turned diagnostics from a grader into a tutor.</p>
+
+          <blockquote style={quoteStyle}>
             &ldquo;If a circuit only works in one evaluation order, it only works by accident.&rdquo;
           </blockquote>
         </section>
@@ -791,7 +1024,7 @@ fn mime(p: &Path) -> &'static str {
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
         <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Mark One: 42 Marks, an 11,998-transistor CPU, 139 tests, one 3.1MB binary.</p>
-        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from transistors up</p>
+        <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from transistors up, played in a browser</p>
       </footer>
     </div>
   );
