@@ -380,13 +380,17 @@ export default function MarkOnePage() {
           <div style={{ margin: '1rem 0' }}>
             {[
               { key: 'D', desc: 'Run diagnostics' },
-              { key: 'Space / K', desc: 'Pulse the clock / clock speed' },
+              { key: 'Space', desc: 'Pulse the clock' },
+              { key: 'K', desc: 'Change the clock speed' },
               { key: 'H', desc: 'Run to HLT or a breakpoint' },
-              { key: 'A / W', desc: 'Probe a wire / show the waveform' },
+              { key: 'A', desc: 'Probe a wire' },
+              { key: 'W', desc: 'Show the waveform' },
               { key: 'T', desc: 'Timing mode' },
-              { key: 'R / Del', desc: 'Rotate / delete the selected part' },
+              { key: 'R', desc: 'Rotate the selected part' },
+              { key: 'Del', desc: 'Delete the selected part' },
               { key: 'P', desc: 'Print the schematic' },
-              { key: 'X / C', desc: 'Reset the simulation / clear the board' },
+              { key: 'X', desc: 'Reset the simulation' },
+              { key: 'C', desc: 'Clear the board' },
             ].map((k) => (
               <div key={k.key} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
                 <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)', minWidth: '110px', textAlign: 'center' }}>{k.key}</code>

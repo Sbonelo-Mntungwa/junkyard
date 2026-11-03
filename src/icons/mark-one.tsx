@@ -2,25 +2,57 @@
 
 import { useId } from 'react';
 
+// Same geometry as the reactor in the Mark One brand mark, with 12 segments
+// instead of 42 so each one still reads at 24px.
+const N = 12;
+const CHARGE = 0.8;
+const p = (r: number, a: number) => `${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`;
+const segs = Array.from({ length: N }, (_, i) => {
+  const a0 = ((i / N) * 360 + 4 - 90) * Math.PI / 180;
+  const a1 = (((i + 1) / N) * 360 - 4 - 90) * Math.PI / 180;
+  const t = ((i + 1) / N) * CHARGE;
+  return {
+    d: `M${p(34, a0)} L${p(50, a0)} A50,50 0 0 1 ${p(50, a1)} L${p(34, a1)} A34,34 0 0 0 ${p(34, a0)} Z`,
+    keyTimes: `0;${(t - 0.02).toFixed(3)};${t.toFixed(3)};0.92;1`,
+  };
+});
+
 export function MarkOneIcon({ size = 40 }: { size?: number }) {
   const id = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden="true">
+    <svg width={size} height={size} viewBox="-60 -60 120 120" fill="none" aria-hidden="true">
       <defs>
-        <linearGradient id={id} x1="6" y1="8" x2="42" y2="42" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#FFD27A" />
-          <stop offset="1" stopColor="#E8930C" />
-        </linearGradient>
+        <filter id={`${id}glow`}>
+          <feGaussianBlur stdDeviation="3" />
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <radialGradient id={`${id}core`}>
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="0.45" stopColor="#bfefff" />
+          <stop offset="1" stopColor="#5ad7ff" stopOpacity="0" />
+        </radialGradient>
       </defs>
-      <g stroke={`url(#${id})`} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14 12h9a12 12 0 0 1 0 24h-9z" />
-        <circle cx="37.5" cy="24" r="2.5" />
-        <path d="M4 18h10M4 30h10M40 24h4" />
+      <circle r="57" stroke="#5ad7ff" strokeOpacity="0.45" strokeWidth="3" />
+      <circle r="28" stroke="#5ad7ff" strokeOpacity="0.45" strokeWidth="3" />
+      <g filter={`url(#${id}glow)`}>
+        {segs.map((s) => (
+          <path key={s.d} d={s.d} fill="#163650">
+            <animate attributeName="fill" values="#163650;#163650;#ffb84d;#ffb84d;#163650" keyTimes={s.keyTimes} dur="3.6s" repeatCount="indefinite" />
+          </path>
+        ))}
       </g>
-      <circle r="2.2" fill="#f0e6ff">
-        <animateMotion dur="2.2s" repeatCount="indefinite" path="M4 18h10M14 18h9M23 24h21" />
-        <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.88;1" dur="2.2s" repeatCount="indefinite" />
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="6s" repeatCount="indefinite" />
+        <circle r="22" stroke="#5ad7ff" strokeOpacity="0.6" strokeWidth="3" strokeDasharray="6 8" />
+      </g>
+      <circle r="12" fill={`url(#${id}core)`}>
+        <animate attributeName="r" values="12;20;20;12" keyTimes={`0;${CHARGE};0.92;1`} dur="3.6s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.45;1;1;0.45" keyTimes={`0;${CHARGE};0.92;1`} dur="3.6s" repeatCount="indefinite" />
       </circle>
+      <circle r="6" fill="#cfefff" />
     </svg>
   );
 }
