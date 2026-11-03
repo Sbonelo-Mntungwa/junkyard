@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import CosmicBackground from '@/components/CosmicBackground';
-import { RustPiIcon, RustPi2Icon, PiMonitorIcon, MoreIcon } from '@/icons';
+import { RustPiIcon, RustPi2Icon, PiMonitorIcon, MarkOneIcon, MoreIcon } from '@/icons';
 
 export default function Home() {
   return (
@@ -453,6 +453,23 @@ export default function Home() {
                 <span className="tag">Alpine</span>
                 <span className="tag">Docker</span>
                 <span className="tag">apk</span>
+              </div>
+            </div>
+          </Link>
+
+          <Link href="/projects/mark-one" className="project-card featured">
+            <div className="card-face">
+              <MarkOneIcon size={44} />
+              <span className="card-title">Mark One</span>
+            </div>
+            <div className="card-pop">
+              <MarkOneIcon size={62} />
+              <span className="card-title-pop">Mark One</span>
+              <p className="card-desc">A game about building a computer from transistors up, on a circuit engine written in Rust.</p>
+              <div className="card-tags">
+                <span className="tag">Rust</span>
+                <span className="tag">CMOS</span>
+                <span className="tag">CPU</span>
               </div>
             </div>
           </Link>
