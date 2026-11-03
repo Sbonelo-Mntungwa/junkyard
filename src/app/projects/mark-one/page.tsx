@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { MarkOneIcon, RustPiIcon } from '@/icons';
+import { MarkOneIcon } from '@/icons';
 import CosmicBackground from '@/components/CosmicBackground';
 import DebugItem from '@/components/DebugItem';
 import CodeBlock from '@/components/CodeBlock';
@@ -366,28 +366,21 @@ export default function MarkOnePage() {
         <section id="app" style={sectionStyle}>
           <h2 style={h2Style}>A Running Application</h2>
           <p style={pStyle}>
-            RustPi was terminal work from start to finish: kernel configs, <code style={codeStyle}>dd</code> to an SD card, and a serial
-            console that either printed <code style={codeStyle}>rustpi#</code> or a kernel panic. Its only interface was a shell prompt.
-          </p>
-          <p style={pStyle}>
-            Mark One is the opposite. It is an interactive application you play in a browser: you drag parts onto a board, click pin to pin to
-            wire them, toggle inputs and watch gold current move through the wires as the engine settles. The Rust underneath never
-            prints to a terminal during play. It answers JSON requests from the UI.
+            Mark One is an interactive application you play in a browser. You drag parts onto a board,
+            click pin to pin to wire them, toggle inputs and watch gold current move through the wires as the engine settles. The Rust
+            underneath never prints to a terminal during play. It answers JSON requests from the UI.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', margin: '2rem 0' }}>
             {[
-              { icon: <RustPiIcon size={34} />, title: 'RustPi', lines: ['Interface: serial console and SSH', 'Output: boot logs', 'Feedback loop: rebuild, re-flash, reboot', 'Proof it works: a shell prompt'] },
-              { icon: <MarkOneIcon size={34} />, title: 'Mark One', lines: ['Interface: a browser workbench', 'Output: live boards, waveforms, schematics', 'Feedback loop: every click re-simulates', 'Proof it works: a display that reads 42'] },
+              { title: 'Every click re-simulates', desc: 'Toggling an input or adding a wire posts the board to /api/sim and redraws every net in gold or steel' },
+              { title: 'Progress is saved', desc: 'Fabricated Marks, board drafts, Experiment designs and custom chips persist in mark_one_save.json' },
+              { title: 'Feedback lives on the board', desc: 'Floating, degraded and shorted nets are flagged as you wire, before diagnostics ever run' },
+              { title: 'The end state is a program', desc: 'The last Marks are software: assembly typed into a ROM, run on the computer you wired' },
             ].map((c) => (
               <div key={c.title} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-void)', borderRadius: '12px', padding: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                  {c.icon}
-                  <h4 style={{ fontSize: '1.2rem', fontWeight: 600, margin: 0, color: 'var(--text-star)' }}>{c.title}</h4>
-                </div>
-                {c.lines.map((l) => (
-                  <p key={l} style={{ fontSize: '0.95rem', margin: '0.4rem 0', color: 'var(--text-dust)' }}>{l}</p>
-                ))}
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.5rem', color: 'var(--text-star)' }}>{c.title}</h4>
+                <p style={{ fontSize: '0.95rem', margin: 0, color: 'var(--text-dust)' }}>{c.desc}</p>
               </div>
             ))}
           </div>
