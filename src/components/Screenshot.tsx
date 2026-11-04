@@ -9,19 +9,17 @@ interface Shot {
   label?: string;
 }
 
-export default function Screenshot({ src, alt, caption, url = 'http://127.0.0.1:7878', phone = false }: Shot & { url?: string; phone?: boolean }) {
+export default function Screenshot({ src, alt, caption, url = 'http://127.0.0.1:7878' }: Shot & { url?: string }) {
   return (
-    <figure style={{ margin: '2rem auto', maxWidth: phone ? '300px' : 'none' }}>
-      <div style={{ borderRadius: phone ? '24px' : '12px', overflow: 'hidden', border: phone ? '6px solid var(--bg-tertiary)' : '1px solid var(--border-void)', boxShadow: '0 20px 80px rgba(0,0,0,0.5)' }}>
-        {!phone && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-void)' }}>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
-            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca40' }}></div>
-            <span style={{ marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-dim)' }}>{url}</span>
-          </div>
-        )}
-        <img src={src} alt={alt} loading="lazy" style={{ display: 'block', width: '100%', height: 'auto', aspectRatio: phone ? '390 / 844' : '1600 / 913', background: '#050b14' }} />
+    <figure style={{ margin: '2rem 0' }}>
+      <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-void)', boxShadow: '0 20px 80px rgba(0,0,0,0.5)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 1rem', background: 'var(--bg-tertiary)', borderBottom: '1px solid var(--border-void)' }}>
+          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56' }}></div>
+          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e' }}></div>
+          <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27ca40' }}></div>
+          <span style={{ marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-dim)' }}>{url}</span>
+        </div>
+        <img src={src} alt={alt} loading="lazy" style={{ display: 'block', width: '100%', height: 'auto', aspectRatio: '1600 / 913', background: '#050b14' }} />
       </div>
       <figcaption style={{ fontSize: '0.85rem', color: 'var(--text-dim)', textAlign: 'center', fontFamily: 'JetBrains Mono, monospace', marginTop: '0.75rem', lineHeight: 1.6 }}>{caption}</figcaption>
     </figure>

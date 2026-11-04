@@ -163,8 +163,8 @@ export default function MarkOnePage() {
         <div style={{ display: 'flex', gap: '3rem', marginTop: '3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
           {[
             { num: '42', label: 'Marks' },
-            { num: '11,998', label: 'Transistor CPU' },
-            { num: '139', label: 'Tests Passing' },
+            { num: '12K', label: 'Transistor CPU' },
+            { num: '11', label: 'Instructions' },
             { num: '3.1', label: 'MB Binary Size' }
           ].map((stat) => (
             <div key={stat.label} style={{ textAlign: 'center' }}>
@@ -216,48 +216,6 @@ export default function MarkOnePage() {
           <span style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease' }}>→</span>
         </a>
 
-        {/* Notion Documentation Link */}
-        <a
-          href="https://tungsten-bramble-977.notion.site/ebd//40db9a7f133e80218039d375c8521ba4"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            marginTop: '1rem',
-            padding: '1rem 2rem',
-            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            borderRadius: '50px',
-            color: 'var(--text-star)',
-            textDecoration: 'none',
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '0.95rem',
-            transition: 'all 0.3s ease',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 10px 40px rgba(255, 255, 255, 0.1)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'none';
-          }}
-        >
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style={{ flexShrink: 0 }}>
-            <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
-          </svg>
-          <span>Read Full Documentation</span>
-          <span style={{ fontSize: '1.1rem', transition: 'transform 0.3s ease' }}>→</span>
-        </a>
-
         {/* Live app */}
         <div style={{ width: '100%', maxWidth: '64rem', marginTop: '2rem', textAlign: 'left' }}>
           <Screenshot
@@ -291,7 +249,6 @@ export default function MarkOnePage() {
               { num: '13', text: 'Build & Run', href: '#build' },
               { num: '14', text: 'Debugging Adventures', href: '#debugging' },
               { num: '15', text: 'Key Learnings', href: '#learnings' },
-              { num: '16', text: 'Full Documentation (Notion)', href: '#documentation' },
             ].map((item) => (
               <li key={item.num} style={{
                 padding: '1rem 1.25rem',
@@ -331,7 +288,7 @@ export default function MarkOnePage() {
             caption="The boot screen after a playthrough. One reactor segment per Mark: 42 Marks on file, 41 fabricated"
           />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', marginTop: '2rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem', marginTop: '2rem' }}>
             {[
               { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12h5M15 12h5" /><path d="M9 6v12" /><path d="M12 8v8" /><path d="M12 8h3v-4M12 16h3v4" /></svg>), title: 'Switch-level Transistors', desc: 'NMOS and PMOS simulated as switches with signal strength, floating nets and leaking charge' },
               { icon: (<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DE1A58" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 20h4v-4h4v-4h4V8h4V4" /></svg>), title: '42 Marks', desc: 'A course from a live wire to software, each Mark gated by diagnostics' },
@@ -371,7 +328,7 @@ export default function MarkOnePage() {
             underneath never prints to a terminal during play. It answers JSON requests from the UI.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem', margin: '2rem 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '1rem', margin: '2rem 0' }}>
             {[
               { title: 'Every click re-simulates', desc: 'Toggling an input or adding a wire posts the board to /api/sim and redraws every net in gold or steel' },
               { title: 'Progress is saved', desc: 'Fabricated Marks, board drafts, Experiment designs and custom chips persist in mark_one_save.json' },
@@ -447,12 +404,6 @@ export default function MarkOnePage() {
             { label: 'After a playthrough', src: img('library-custom-component'), alt: 'The Components dialog with all chips unlocked and a custom Gate adder component', caption: '"34 of 34 unlocked through Missions", plus GADD "Gate adder" (50 transistors) saved from Experiment' },
           ]} />
 
-          <h3 style={h3Style}>On a phone</h3>
-          <p style={pStyle}>
-            Below 820px the layout stacks: the board on top, a fabricator that scrolls sideways, then Mission, Spec and Databank, with the
-            help bar pinned to the bottom.
-          </p>
-          <Screenshot phone src={img('mobile-nand')} alt="Mk 4 NAND at phone width" caption="Mk 4 NAND at 390px wide" />
         </section>
 
         {/* Lessons */}
@@ -946,77 +897,11 @@ fn mime(p: &Path) -> &'static str {
           </blockquote>
         </section>
 
-        {/* Full Documentation */}
-        <section id="documentation" style={sectionStyle}>
-          <h2 style={h2Style}>Full Documentation</h2>
-          <p style={pStyle}>
-            Want the complete technical deep-dive? The full Mark One documentation covers the switch-level solver, every Mark and its
-            diagnostics, the timing model, the CPU and its instruction set, and every exploit found along the way.
-          </p>
-
-          <a
-            href="https://tungsten-bramble-977.notion.site/ebd//40db9a7f133e80218039d375c8521ba4"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'block',
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(143, 1, 119, 0.08) 100%)',
-              border: '1px solid rgba(143, 1, 119, 0.3)',
-              borderRadius: '12px',
-              padding: '2rem',
-              margin: '2rem 0',
-              textDecoration: 'none',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#DE1A58';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 10px 40px rgba(143, 1, 119, 0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(143, 1, 119, 0.3)';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-              <svg viewBox="0 0 24 24" width="32" height="32" fill="var(--text-star)" style={{ flexShrink: 0 }}>
-                <path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L3.01 2.295c-.466.046-.56.28-.374.466zm.793 3.08v13.904c0 .747.373 1.027 1.214.98l14.523-.84c.84-.046.933-.56.933-1.167V6.354c0-.606-.233-.933-.746-.886l-15.177.887c-.56.046-.747.326-.747.933zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.747 0-.933-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.186c-.093-.186 0-.653.327-.726l.84-.233V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM2.738 1.408l13.59-.933c1.675-.14 2.101.093 2.801.607l3.876 2.706c.467.327.607.747.607 1.214v16.21c0 1.026-.373 1.635-1.68 1.726l-15.458.934c-.98.046-1.448-.093-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.667c0-.839.374-1.54 1.148-1.26z"/>
-              </svg>
-              <div>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-star)', margin: 0 }}>Mark One: Complete Technical Documentation</h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', margin: '0.25rem 0 0', fontFamily: 'JetBrains Mono, monospace' }}>tungsten-bramble-977.notion.site</p>
-              </div>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
-              {['Switch-level Solver', 'All 42 Marks', 'Diagnostics', 'Timing Mode', 'CPU & ISA', 'Verilog Export', 'Exploits Found'].map((tag) => (
-                <span key={tag} style={{
-                  background: 'rgba(143, 1, 119, 0.15)',
-                  border: '1px solid rgba(143, 1, 119, 0.25)',
-                  padding: '0.25rem 0.75rem',
-                  borderRadius: '100px',
-                  fontSize: '0.8rem',
-                  color: 'var(--accent-cosmic)',
-                  fontFamily: 'JetBrains Mono, monospace'
-                }}>{tag}</span>
-              ))}
-            </div>
-            <p style={{ color: 'var(--text-dust)', margin: 0, fontSize: '0.95rem', lineHeight: 1.7 }}>
-              Covers four-valued signals and the union-find network solver, signal strength and charge leakage, behavioural chip models,
-              the event-driven timing simulator with inertial delays and setup checks, the 8-bit CPU and its 11 instructions, Verilog and
-              KiCad export, and every design that once cheated diagnostics.
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1.25rem', color: 'var(--accent-nova)', fontSize: '0.9rem', fontFamily: 'JetBrains Mono, monospace' }}>
-              <span>Open in Notion</span>
-              <span style={{ fontSize: '1.1rem' }}>→</span>
-            </div>
-          </a>
-        </section>
       </main>
 
       {/* Footer */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '4rem 2rem', textAlign: 'center', borderTop: '1px solid var(--border-void)' }}>
-        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Mark One: 42 Marks, an 11,998-transistor CPU, 139 tests, one 3.1MB binary.</p>
+        <p style={{ color: 'var(--text-dim)', fontSize: '1rem' }}>Mark One: 42 Marks, a 12K-transistor CPU, 11 instructions, one 3.1MB binary.</p>
         <p style={{ marginTop: '2rem', fontSize: '0.875rem', color: 'var(--text-dim)' }}>© 2026 - Built from transistors up, played in a browser</p>
       </footer>
     </div>
