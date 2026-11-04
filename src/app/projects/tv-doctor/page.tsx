@@ -464,7 +464,7 @@ fn actions() -> HashMap<&'static str, Vec<&'static str>> {
           <ScreenshotTabs shots={[
             { label: 'Channels', src: img('platform-routes'), alt: 'The platform after Channels, with the routes output', caption: 'routes, checked live: YouTube and Spotify over Cast v2 on 8009, Netflix over DIAL on 8008, DStv unreachable' },
             { label: 'Remote guide', src: img('platform-guide'), alt: 'The platform showing the remote guide', caption: '"Clear cache, not Clear data. Clear data signs you out of the app." WARN lines print in amber' },
-            { label: 'Dark mode', src: img('platform-dark-status'), alt: 'The platform in dark mode after Vital signs', caption: 'The same screen in macOS dark mode: status says awake yes, ADB reachable no' },
+            { label: 'Vital signs', src: img('platform-status'), alt: 'The platform after Vital signs, with the status output', caption: 'status: the remembered TV, awake yes, ADB reachable no' },
           ].map((s) => ({ ...s, url }))} />
 
           <p style={pStyle}>
