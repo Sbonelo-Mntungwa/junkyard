@@ -4,7 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import WarpField from '@/components/WarpField';
 
 const PHOTOS = Array.from({ length: 17 }, (_, i) => `/faith/${String(i + 1).padStart(2, '0')}.jpg`);
-const SLIDE_MS = 6500;
+// Photos per second drifting right to left.
+const DRIFT = 1 / 4.2;
 const PORTAL_MS = 5400;
 
 const LOG = [
@@ -231,29 +232,27 @@ export default function FaithPage() {
           position: fixed;
           inset: 0;
           z-index: 3;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          perspective: 1400px;
-          cursor: pointer;
-          animation: logIn 1.2s ease forwards;
+          perspective: 1600px;
+          cursor: grab;
+          touch-action: pan-y;
+          opacity: 0;
+          animation: logIn 1.4s ease forwards;
         }
-        .slide {
+        .stage.dragging { cursor: grabbing; }
+        .card {
           position: absolute;
+          left: 50%;
+          top: 50%;
           will-change: transform, opacity, filter;
         }
-        .slide.in-fwd { animation: inFwd 1.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .slide.in-back { animation: inBack 1.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .slide.out-fwd { animation: outFwd 1.1s cubic-bezier(0.5, 0, 0.75, 0) both; }
-        .slide.out-back { animation: outBack 1.1s cubic-bezier(0.5, 0, 0.75, 0) both; }
+        .card-center { transform: translate(-50%, -50%); }
         .float { animation: float 7s ease-in-out infinite; }
         .frame {
           position: relative;
           padding: 3px;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 0 50px rgba(222, 26, 88, 0.45), 0 0 140px rgba(6, 182, 212, 0.22);
-          animation: glow 5s ease-in-out infinite;
+          box-shadow: 0 0 24px rgba(222, 26, 88, 0.25);
         }
         .frame::before {
           content: '';
@@ -261,6 +260,15 @@ export default function FaithPage() {
           inset: -60%;
           background: conic-gradient(from 0deg, #8F0177, #DE1A58, #ff9ec0, #06b6d4, #f0e6ff, #8F0177);
           animation: spin 6s linear infinite;
+        }
+        .halo {
+          position: absolute;
+          inset: 0;
+          border-radius: 20px;
+          pointer-events: none;
+          opacity: var(--f, 0);
+          box-shadow: 0 0 60px rgba(222, 26, 88, 0.55), 0 0 150px rgba(6, 182, 212, 0.3);
+          animation: glow 5s ease-in-out infinite;
         }
         .photo {
           position: relative;
@@ -271,18 +279,9 @@ export default function FaithPage() {
         .photo img {
           display: block;
           width: auto;
-          height: auto;
-          max-height: 72vh;
-          max-width: 84vw;
-          animation: kenburns 10s ease-out both;
-        }
-        .photo::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(115deg, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.28) 50%, rgba(255, 255, 255, 0) 65%);
-          transform: translateX(-120%);
-          animation: sheen 1.8s 0.9s ease-out forwards;
+          height: min(60vh, 92vw);
+          max-width: none;
+          pointer-events: none;
         }
         .hud {
           position: fixed;
@@ -354,21 +353,6 @@ export default function FaithPage() {
           letter-spacing: 0.2em;
           color: #9b8fbf;
         }
-        .bar {
-          width: 110px;
-          height: 2px;
-          border-radius: 2px;
-          background: rgba(155, 143, 191, 0.25);
-          overflow: hidden;
-        }
-        .bar span {
-          display: block;
-          height: 100%;
-          background: linear-gradient(90deg, #DE1A58, #06b6d4);
-          transform-origin: left;
-          animation: fill ${SLIDE_MS}ms linear forwards;
-        }
-        .bar.paused span { animation-play-state: paused; }
         .hint {
           font-family: 'JetBrains Mono', monospace;
           font-size: 0.62rem;
@@ -401,33 +385,14 @@ export default function FaithPage() {
           0%, 100% { transform: translate(0, 0) scale(1); }
           50% { transform: translate(8vmax, 6vmax) scale(1.15); }
         }
-        @keyframes inFwd {
-          0% { opacity: 0; transform: translateZ(-1100px) rotateY(-22deg) rotateZ(-5deg); filter: blur(16px) brightness(2); }
-          55% { filter: blur(0) brightness(1.2); }
-          100% { opacity: 1; transform: none; filter: none; }
-        }
-        @keyframes inBack {
-          0% { opacity: 0; transform: translateZ(600px) rotateY(18deg) rotateZ(4deg); filter: blur(16px) brightness(2); }
-          55% { filter: blur(0) brightness(1.2); }
-          100% { opacity: 1; transform: none; filter: none; }
-        }
-        @keyframes outFwd { to { opacity: 0; transform: translateZ(600px) rotateY(16deg) rotateZ(4deg); filter: blur(20px) brightness(1.8); } }
-        @keyframes outBack { to { opacity: 0; transform: translateZ(-1100px) rotateY(-20deg) rotateZ(-5deg); filter: blur(20px) brightness(1.8); } }
         @keyframes float {
-          0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
-          33% { transform: translateY(-10px) rotateX(2deg) rotateY(-3deg); }
-          66% { transform: translateY(6px) rotateX(-1.5deg) rotateY(2.5deg); }
+          0%, 100% { transform: translateY(0) rotateX(0deg); }
+          50% { transform: translateY(-12px) rotateX(2deg); }
         }
         @keyframes glow {
-          0%, 100% { box-shadow: 0 0 50px rgba(222, 26, 88, 0.45), 0 0 140px rgba(6, 182, 212, 0.22); }
-          50% { box-shadow: 0 0 70px rgba(6, 182, 212, 0.45), 0 0 160px rgba(222, 26, 88, 0.3); }
+          0%, 100% { box-shadow: 0 0 60px rgba(222, 26, 88, 0.55), 0 0 150px rgba(6, 182, 212, 0.3); }
+          50% { box-shadow: 0 0 80px rgba(6, 182, 212, 0.55), 0 0 170px rgba(222, 26, 88, 0.35); }
         }
-        @keyframes kenburns {
-          from { transform: scale(1.14) translate(1.5%, 1.5%); }
-          to { transform: scale(1) translate(0, 0); }
-        }
-        @keyframes sheen { to { transform: translateX(120%); } }
-        @keyframes fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
       `}</style>
 
       <WarpField warp={warp} />
@@ -480,44 +445,86 @@ function Portal({ opening, onOpen }: { opening: boolean; onOpen: () => void }) {
   );
 }
 
+const wrap = (d: number) => ((((d + PHOTOS.length / 2) % PHOTOS.length) + PHOTOS.length) % PHOTOS.length) - PHOTOS.length / 2;
+
 function Slideshow({ onTravel }: { onTravel: () => void }) {
   const [index, setIndex] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
-  const [dir, setDir] = useState(1);
   const [paused, setPaused] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [seen, setSeen] = useState(() => new Set([0]));
-  const touchX = useRef<number | null>(null);
-  const swiped = useRef(false);
-  const exitTimer = useRef<ReturnType<typeof setTimeout>>();
+  const cards = useRef<(HTMLDivElement | null)[]>([]);
+  const motion = useRef({ pos: 0, target: 0, slot: 300, slow: false, paused: false, drag: null as null | { x: number; pos: number } });
+  const shown = useRef(0);
 
-  const goTo = useCallback((next: number, d: number) => {
-    const n = (next + PHOTOS.length) % PHOTOS.length;
-    if (n === index) return;
-    setPrev(index);
-    setIndex(n);
-    setDir(d);
-    setSeen((s) => new Set(s).add(n));
-    clearTimeout(exitTimer.current);
-    exitTimer.current = setTimeout(() => setPrev(null), 1200);
-    onTravel();
-  }, [index, onTravel]);
-
-  const step = useCallback((d: number) => goTo(index + d, d), [goTo, index]);
+  useEffect(() => {
+    motion.current.paused = paused;
+  }, [paused]);
 
   useEffect(() => {
     PHOTOS.forEach((src) => { new Image().src = src; });
+
+    const m = motion.current;
+    const resize = () => {
+      const card = Math.min(window.innerHeight * 0.6, window.innerWidth * 0.92);
+      m.slot = Math.min(card * 0.56, window.innerWidth * 0.52);
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    let frame = 0;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      if (!m.paused && !m.drag) m.target += dt * DRIFT * (m.slow ? 0.35 : 1);
+      if (!m.drag) m.pos += (m.target - m.pos) * (1 - Math.exp(-dt * 5));
+
+      cards.current.forEach((el, i) => {
+        if (!el) return;
+        const d = wrap(i - m.pos);
+        const a = Math.abs(d);
+        if (a > 4.5) {
+          el.style.visibility = 'hidden';
+          return;
+        }
+        el.style.visibility = 'visible';
+        const turn = Math.max(-50, Math.min(50, -d * 24));
+        el.style.transform = `translate3d(${d * m.slot}px, 0, ${-a * 240}px) rotateY(${turn}deg) scale(${1 - Math.min(a, 3) * 0.08})`;
+        el.style.opacity = String(Math.max(0, Math.min(1, 1.3 - a * 0.3)));
+        el.style.filter = a < 0.6 ? 'none' : `blur(${((a - 0.6) * 2.2).toFixed(1)}px) brightness(${(1 - Math.min(a, 3) * 0.16).toFixed(2)})`;
+        el.style.zIndex = String(100 - Math.round(a * 10));
+        el.style.setProperty('--f', Math.max(0, 1 - a * 1.6).toFixed(2));
+      });
+
+      const cur = ((Math.round(m.pos) % PHOTOS.length) + PHOTOS.length) % PHOTOS.length;
+      if (cur !== shown.current) {
+        setPrev(shown.current);
+        shown.current = cur;
+        setIndex(cur);
+        setSeen((s) => new Set(s).add(cur));
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('resize', resize);
+    };
   }, []);
 
-  useEffect(() => {
-    if (paused) return;
-    const t = setTimeout(() => step(1), SLIDE_MS);
-    return () => clearTimeout(t);
-  }, [index, paused, step]);
+  const jump = useCallback((by: number) => {
+    const m = motion.current;
+    m.target = Math.round(m.target) + by;
+    onTravel();
+  }, [onTravel]);
+
+  const jumpTo = (i: number) => jump(wrap(i - Math.round(motion.current.target)));
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') step(1);
-      else if (e.key === 'ArrowLeft') step(-1);
+      if (e.key === 'ArrowRight') jump(1);
+      else if (e.key === 'ArrowLeft') jump(-1);
       else if (e.key === ' ') {
         e.preventDefault();
         setPaused((p) => !p);
@@ -525,24 +532,23 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [step]);
+  }, [jump]);
 
-  const onClick = (e: React.MouseEvent) => {
-    if (swiped.current) {
-      swiped.current = false;
-      return;
-    }
-    step(e.clientX < window.innerWidth / 3 ? -1 : 1);
+  const onPointerDown = (e: React.PointerEvent) => {
+    const m = motion.current;
+    m.drag = { x: e.clientX, pos: m.pos };
+    setDragging(true);
+    (e.target as Element).setPointerCapture?.(e.pointerId);
   };
-
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (touchX.current === null) return;
-    const dx = e.changedTouches[0].clientX - touchX.current;
-    touchX.current = null;
-    if (Math.abs(dx) > 40) {
-      swiped.current = true;
-      step(dx < 0 ? 1 : -1);
-    }
+  const onPointerMove = (e: React.PointerEvent) => {
+    const m = motion.current;
+    if (!m.drag) return;
+    m.pos = m.drag.pos - (e.clientX - m.drag.x) / m.slot;
+    m.target = m.pos;
+  };
+  const onPointerUp = () => {
+    motion.current.drag = null;
+    setDragging(false);
   };
 
   return (
@@ -554,13 +560,28 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
       <div className="vignette" />
 
       <div
-        className="stage"
-        onClick={onClick}
-        onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
-        onTouchEnd={onTouchEnd}
+        className={`stage${dragging ? ' dragging' : ''}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onPointerEnter={(e) => { if (e.pointerType === 'mouse') motion.current.slow = true; }}
+        onPointerLeave={() => { motion.current.slow = false; onPointerUp(); }}
       >
-        {prev !== null && <Slide key={`p${prev}-${index}`} src={PHOTOS[prev]} motion={dir > 0 ? 'out-fwd' : 'out-back'} />}
-        <Slide key={`c${index}`} src={PHOTOS[index]} motion={dir > 0 ? 'in-fwd' : 'in-back'} />
+        {PHOTOS.map((src, i) => (
+          <div key={src} ref={(el) => { cards.current[i] = el; }} className="card" style={{ visibility: 'hidden' }}>
+            <div className="card-center">
+              <div className="float" style={{ animationDelay: `${-(i % 5) * 1.4}s` }}>
+                <div className="frame">
+                  <div className="photo">
+                    <img src={src} alt="Faith" draggable={false} />
+                  </div>
+                  <div className="halo" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="hud top">
@@ -574,31 +595,17 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
               key={src}
               className={`star${i === index ? ' on' : seen.has(i) ? ' seen' : ''}`}
               aria-label={`Photo ${i + 1}`}
-              onClick={() => goTo(i, i > index ? 1 : -1)}
+              onClick={() => jumpTo(i)}
             />
           ))}
         </div>
         <div className="meta">
           <span>{String(index + 1).padStart(2, '0')} / {PHOTOS.length}</span>
-          <div className={`bar${paused ? ' paused' : ''}`}><span key={index} /></div>
-          <span>{paused ? 'paused' : 'playing'}</span>
+          <span>&middot;</span>
+          <span>{paused ? 'paused' : 'drifting'}</span>
         </div>
-        <div className="hint">Swipe or use arrows &middot; space to pause</div>
+        <div className="hint">Drag or use arrows &middot; space to pause</div>
       </div>
     </>
-  );
-}
-
-function Slide({ src, motion }: { src: string; motion: string }) {
-  return (
-    <div className={`slide ${motion}`}>
-      <div className="float">
-        <div className="frame">
-          <div className="photo">
-            <img src={src} alt="Faith" draggable={false} />
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
