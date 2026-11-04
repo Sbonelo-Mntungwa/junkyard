@@ -447,7 +447,18 @@ function Portal({ opening, onOpen }: { opening: boolean; onOpen: () => void }) {
 
 const wrap = (d: number) => ((((d + PHOTOS.length / 2) % PHOTOS.length) + PHOTOS.length) % PHOTOS.length) - PHOTOS.length / 2;
 
+// Fisher-Yates, so every visit starts the stream in a new order.
+const shuffle = <T,>(list: T[]) => {
+  const out = [...list];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+};
+
 function Slideshow({ onTravel }: { onTravel: () => void }) {
+  const [photos] = useState(() => shuffle(PHOTOS));
   const [index, setIndex] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
@@ -553,8 +564,8 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
 
   return (
     <>
-      {prev !== null && <div key={`a${prev}-${index}`} className="ambient leaving" style={{ backgroundImage: `url(${PHOTOS[prev]})` }} />}
-      <div key={`a${index}`} className="ambient" style={{ backgroundImage: `url(${PHOTOS[index]})` }} />
+      {prev !== null && <div key={`a${prev}-${index}`} className="ambient leaving" style={{ backgroundImage: `url(${photos[prev]})` }} />}
+      <div key={`a${index}`} className="ambient" style={{ backgroundImage: `url(${photos[index]})` }} />
       <div className="nebula one" />
       <div className="nebula two" />
       <div className="vignette" />
@@ -568,7 +579,7 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
         onPointerEnter={(e) => { if (e.pointerType === 'mouse') motion.current.slow = true; }}
         onPointerLeave={() => { motion.current.slow = false; onPointerUp(); }}
       >
-        {PHOTOS.map((src, i) => (
+        {photos.map((src, i) => (
           <div key={src} ref={(el) => { cards.current[i] = el; }} className="card" style={{ visibility: 'hidden' }}>
             <div className="card-center">
               <div className="float" style={{ animationDelay: `${-(i % 5) * 1.4}s` }}>
@@ -590,7 +601,7 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
 
       <div className="hud bottom">
         <div className="constellation">
-          {PHOTOS.map((src, i) => (
+          {photos.map((src, i) => (
             <button
               key={src}
               className={`star${i === index ? ' on' : seen.has(i) ? ' seen' : ''}`}
