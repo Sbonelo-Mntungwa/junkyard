@@ -1,12 +1,14 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import WarpField from '@/components/WarpField';
 
 const PHOTOS = Array.from({ length: 17 }, (_, i) => `/faith/${String(i + 1).padStart(2, '0')}.jpg`);
 // Photos per second drifting right to left.
 const DRIFT = 1 / 4.2;
-const PORTAL_MS = 5400;
+// The Enter button appears once the unlock title has resolved.
+const UNLOCK_MS = 4300;
 
 const LOG = [
   '> incoming signal: sbonelo.xyz/faith',
@@ -43,16 +45,6 @@ export default function FaithPage() {
     setTimeout(() => setPhase('show'), 1100);
   }, [pulse]);
 
-  useEffect(() => {
-    if (phase !== 'portal') return;
-    const t = setTimeout(open, PORTAL_MS);
-    window.addEventListener('keydown', open);
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener('keydown', open);
-    };
-  }, [phase, open]);
-
   return (
     <div className="faith">
       <style jsx global>{`
@@ -75,7 +67,6 @@ export default function FaithPage() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
         }
         .portal-log {
           position: absolute;
@@ -164,17 +155,32 @@ export default function FaithPage() {
           filter: blur(12px);
           animation: titleIn 1.4s 3.1s cubic-bezier(0.16, 1, 0.3, 1) forwards, shimmer 4s linear infinite;
         }
-        .portal-skip {
+        .portal-enter {
           position: absolute;
-          bottom: 7%;
+          bottom: 9%;
+          padding: 0.85rem 2.4rem;
+          border-radius: 100px;
+          border: 1px solid rgba(222, 26, 88, 0.7);
+          background: linear-gradient(135deg, rgba(143, 1, 119, 0.35), rgba(6, 182, 212, 0.18));
+          color: #f0e6ff;
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.72rem;
-          letter-spacing: 0.3em;
+          font-size: 0.85rem;
+          letter-spacing: 0.4em;
+          padding-left: calc(2.4rem + 0.4em);
           text-transform: uppercase;
-          color: #5a5475;
+          cursor: pointer;
           opacity: 0;
-          animation: logIn 0.6s 1.2s ease forwards, breathe 2.4s 2s ease-in-out infinite;
+          transform: translateY(12px);
+          pointer-events: none;
+          transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
         }
+        .portal-enter.ready {
+          opacity: 1;
+          transform: none;
+          pointer-events: auto;
+          animation: beacon 2.4s ease-in-out infinite;
+        }
+        .portal-enter:hover { border-color: #06b6d4; box-shadow: 0 0 40px rgba(6, 182, 212, 0.55); }
         .portal-flash {
           position: fixed;
           inset: 0;
@@ -185,7 +191,7 @@ export default function FaithPage() {
         .portal.is-opening .portal-core { transform: scale(9); opacity: 0; }
         .portal.is-opening .portal-log,
         .portal.is-opening .portal-title,
-        .portal.is-opening .portal-skip { opacity: 0 !important; transition: opacity 0.4s ease; animation: none; }
+        .portal.is-opening .portal-enter { opacity: 0 !important; transition: opacity 0.4s ease; animation: none; }
         .portal.is-opening .portal-flash { animation: flash 1.1s ease-in forwards; }
 
         /* Slideshow */
@@ -296,72 +302,119 @@ export default function FaithPage() {
           animation: logIn 1.2s 0.6s ease forwards;
         }
         .hud.top { top: max(1.2rem, 3vh); }
-        .hud.bottom { bottom: max(1.2rem, 3vh); gap: 0.7rem; }
         .faith-title {
-          font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(1.6rem, 5vw, 2.4rem);
-          letter-spacing: 0.35em;
-          padding-left: 0.35em;
-          background: linear-gradient(90deg, #f0e6ff, #ff9ec0, #06b6d4, #f0e6ff);
-          background-size: 300% 100%;
+          position: relative;
+          font-family: 'Orbitron', sans-serif;
+          font-weight: 900;
+          font-size: clamp(1.5rem, 5.5vw, 2.8rem);
+          letter-spacing: 0.08em;
+          line-height: 1;
+          text-transform: uppercase;
+          background: linear-gradient(135deg, #8F0177 0%, #a8028f 20%, #DE1A58 40%, #ff2d6a 60%, #06b6d4 80%, #8F0177 100%);
+          background-size: 200% 200%;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          animation: shimmer 6s linear infinite;
-          filter: drop-shadow(0 0 18px rgba(222, 26, 88, 0.5));
+          filter: drop-shadow(0 0 24px rgba(222, 26, 88, 0.45));
+          animation: gradientShift 8s ease-in-out infinite;
         }
-        .constellation {
-          position: relative;
-          display: flex;
-          align-items: center;
-          gap: clamp(6px, 1.6vw, 14px);
-          pointer-events: auto;
-        }
-        .constellation::before {
-          content: '';
+        .faith-title::before,
+        .faith-title::after {
+          content: attr(data-text);
           position: absolute;
-          left: 4px;
-          right: 4px;
-          top: 50%;
-          height: 1px;
-          background: linear-gradient(90deg, rgba(222, 26, 88, 0), rgba(222, 26, 88, 0.5), rgba(6, 182, 212, 0.5), rgba(6, 182, 212, 0));
+          top: 0;
+          left: 0;
+          width: 100%;
+          background-size: 200% 200%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
-        .star {
-          position: relative;
-          width: 7px;
-          height: 7px;
-          padding: 0;
-          border: none;
-          border-radius: 50%;
-          background: #5a5475;
-          cursor: pointer;
-          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), background 0.5s ease, box-shadow 0.5s ease;
+        .faith-title::before {
+          background-image: linear-gradient(135deg, #06b6d4 0%, #DE1A58 50%, #8F0177 100%);
+          clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+          animation: glitchBefore 4s ease-in-out infinite, gradientShift 8s ease-in-out infinite reverse;
         }
-        .star::after { content: ''; position: absolute; inset: -10px; }
-        .star.seen { background: #9b8fbf; }
-        .star.on {
-          background: #ffffff;
-          transform: scale(1.9);
-          box-shadow: 0 0 10px #DE1A58, 0 0 22px #06b6d4;
+        .faith-title::after {
+          background-image: linear-gradient(135deg, #DE1A58 0%, #8F0177 50%, #06b6d4 100%);
+          clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+          animation: glitchAfter 4s ease-in-out infinite, gradientShift 8s ease-in-out infinite;
         }
-        .meta {
-          display: flex;
-          align-items: center;
-          gap: 0.9rem;
+        .faith-back {
+          position: fixed;
+          top: max(1.3rem, 3vh);
+          left: max(1.2rem, 2.5vw);
+          z-index: 20;
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.72rem;
-          letter-spacing: 0.2em;
+          font-size: 0.9rem;
           color: #9b8fbf;
+          text-decoration: none;
+          transition: color 0.3s ease, text-shadow 0.3s ease;
         }
-        .hint {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 0.62rem;
-          letter-spacing: 0.25em;
-          text-transform: uppercase;
-          color: #5a5475;
+        .faith-back:hover { color: #f0e6ff; text-shadow: 0 0 14px rgba(222, 26, 88, 0.8); }
+
+        /* Gentle glitch on one photo at a time */
+        .photo .ghost {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          mix-blend-mode: screen;
+          pointer-events: none;
         }
+        .photo .ghost.r { filter: sepia(1) saturate(6) hue-rotate(-50deg); }
+        .photo .ghost.c { filter: sepia(1) saturate(6) hue-rotate(150deg); }
+        .card.glitching .ghost.r { animation: glitchR 0.6s steps(1, end) both; }
+        .card.glitching .ghost.c { animation: glitchC 0.6s steps(1, end) both; }
+        .card.glitching .photo .base { animation: jitter 0.6s steps(1, end) both; }
 
         @keyframes logIn { to { opacity: 1; } }
+        @keyframes beacon {
+          0%, 100% { box-shadow: 0 0 18px rgba(222, 26, 88, 0.35); }
+          50% { box-shadow: 0 0 44px rgba(222, 26, 88, 0.7), 0 0 80px rgba(6, 182, 212, 0.3); }
+        }
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        @keyframes glitchBefore {
+          0%, 85%, 100% { transform: translate(0); }
+          86% { transform: translate(-4px, -2px); }
+          88% { transform: translate(4px, 2px); }
+          90% { transform: translate(-2px, 1px); }
+          92% { transform: translate(2px, -1px); }
+        }
+        @keyframes glitchAfter {
+          0%, 85%, 100% { transform: translate(0); }
+          87% { transform: translate(4px, 2px); }
+          89% { transform: translate(-4px, -2px); }
+          91% { transform: translate(2px, -1px); }
+          93% { transform: translate(-2px, 1px); }
+        }
+        @keyframes glitchR {
+          0% { opacity: 0.6; transform: translateX(-6px); clip-path: inset(12% 0 70% 0); }
+          20% { transform: translateX(5px); clip-path: inset(55% 0 28% 0); }
+          40% { transform: translateX(-3px); clip-path: inset(32% 0 52% 0); }
+          60% { transform: translateX(4px); clip-path: inset(76% 0 6% 0); }
+          80% { transform: translateX(-2px); clip-path: inset(2% 0 88% 0); }
+          100% { opacity: 0; transform: none; clip-path: inset(0); }
+        }
+        @keyframes glitchC {
+          0% { opacity: 0.5; transform: translateX(6px); clip-path: inset(60% 0 22% 0); }
+          20% { transform: translateX(-5px); clip-path: inset(18% 0 66% 0); }
+          40% { transform: translateX(3px); clip-path: inset(70% 0 12% 0); }
+          60% { transform: translateX(-4px); clip-path: inset(40% 0 44% 0); }
+          80% { transform: translateX(2px); clip-path: inset(86% 0 2% 0); }
+          100% { opacity: 0; transform: none; clip-path: inset(0); }
+        }
+        @keyframes jitter {
+          0% { transform: translateX(2px); }
+          20% { transform: translateX(-2px); }
+          40% { transform: translateX(1px); }
+          60% { transform: translateX(-1px); }
+          80%, 100% { transform: none; }
+        }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes draw { to { stroke-dashoffset: 0; } }
         @keyframes vortexIn { to { opacity: 0.95; transform: scale(1); } }
@@ -396,6 +449,7 @@ export default function FaithPage() {
       `}</style>
 
       <WarpField warp={warp} />
+      <Link href="/" className="faith-back">&lt; Back</Link>
 
       {phase === 'show' ? (
         <Slideshow onTravel={() => pulse(650)} />
@@ -407,8 +461,24 @@ export default function FaithPage() {
 }
 
 function Portal({ opening, onOpen }: { opening: boolean; onOpen: () => void }) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setReady(true), UNLOCK_MS);
+    return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') onOpen();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [ready, onOpen]);
+
   return (
-    <div className={`portal${opening ? ' is-opening' : ''}`} onClick={onOpen}>
+    <div className={`portal${opening ? ' is-opening' : ''}`}>
       <div className="portal-log">
         {LOG.map((line, i) => (
           <div key={line} style={{ animationDelay: `${0.3 + i * 0.7}s` }}>{line}</div>
@@ -439,7 +509,7 @@ function Portal({ opening, onOpen }: { opening: boolean; onOpen: () => void }) {
       </div>
 
       <div className="portal-title">Secret portal unlocked</div>
-      <div className="portal-skip">Tap to enter</div>
+      <button className={`portal-enter${ready ? ' ready' : ''}`} onClick={onOpen} tabIndex={ready ? 0 : -1}>Enter</button>
       <div className="portal-flash" />
     </div>
   );
@@ -463,7 +533,6 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
   const [prev, setPrev] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const [seen, setSeen] = useState(() => new Set([0]));
   const cards = useRef<(HTMLDivElement | null)[]>([]);
   const motion = useRef({ pos: 0, target: 0, slot: 300, slow: false, paused: false, drag: null as null | { x: number; pos: number } });
   const shown = useRef(0);
@@ -513,7 +582,6 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
         setPrev(shown.current);
         shown.current = cur;
         setIndex(cur);
-        setSeen((s) => new Set(s).add(cur));
       }
       frame = requestAnimationFrame(tick);
     };
@@ -524,13 +592,29 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
     };
   }, []);
 
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
+    const next = () => {
+      t = setTimeout(() => {
+        const m = motion.current;
+        const visible = cards.current.filter((el, i) => el && Math.abs(wrap(i - m.pos)) < 2.5) as HTMLDivElement[];
+        const el = visible[Math.floor(Math.random() * visible.length)];
+        if (el) {
+          el.classList.add('glitching');
+          setTimeout(() => el.classList.remove('glitching'), 650);
+        }
+        next();
+      }, 1800 + Math.random() * 2800);
+    };
+    next();
+    return () => clearTimeout(t);
+  }, []);
+
   const jump = useCallback((by: number) => {
     const m = motion.current;
     m.target = Math.round(m.target) + by;
     onTravel();
   }, [onTravel]);
-
-  const jumpTo = (i: number) => jump(wrap(i - Math.round(motion.current.target)));
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -585,7 +669,9 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
               <div className="float" style={{ animationDelay: `${-(i % 5) * 1.4}s` }}>
                 <div className="frame">
                   <div className="photo">
-                    <img src={src} alt="Faith" draggable={false} />
+                    <img className="base" src={src} alt="Faith" draggable={false} />
+                    <img className="ghost r" src={src} alt="" aria-hidden="true" draggable={false} />
+                    <img className="ghost c" src={src} alt="" aria-hidden="true" draggable={false} />
                   </div>
                   <div className="halo" />
                 </div>
@@ -596,27 +682,9 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
       </div>
 
       <div className="hud top">
-        <div className="faith-title">For Faith</div>
+        <div className="faith-title" data-text="For Faith">For Faith</div>
       </div>
 
-      <div className="hud bottom">
-        <div className="constellation">
-          {photos.map((src, i) => (
-            <button
-              key={src}
-              className={`star${i === index ? ' on' : seen.has(i) ? ' seen' : ''}`}
-              aria-label={`Photo ${i + 1}`}
-              onClick={() => jumpTo(i)}
-            />
-          ))}
-        </div>
-        <div className="meta">
-          <span>{String(index + 1).padStart(2, '0')} / {PHOTOS.length}</span>
-          <span>&middot;</span>
-          <span>{paused ? 'paused' : 'drifting'}</span>
-        </div>
-        <div className="hint">Drag or use arrows &middot; space to pause</div>
-      </div>
     </>
   );
 }
