@@ -61,11 +61,11 @@ export default function TvDoctorPage() {
     fontSize: '1.1rem'
   };
 
-  const rows = (items: { key: string; desc: string }[], keyWidth = '110px') => (
+  const rows = (items: { key: string; desc: string }[], keyWidth = '110px', align: 'center' | 'left' = 'center') => (
     <div style={{ margin: '1rem 0' }}>
       {items.map((k) => (
         <div key={k.key} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', margin: '0.75rem 0' }}>
-          <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)', minWidth: keyWidth, textAlign: 'center' }}>{k.key}</code>
+          <code style={{ flexShrink: 0, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.9rem', background: 'var(--bg-tertiary)', padding: '0.25rem 0.75rem', borderRadius: '4px', color: 'var(--accent-aurora)', minWidth: keyWidth, textAlign: align }}>{k.key}</code>
           <span style={{ color: 'var(--text-dust)', fontSize: '1.05rem' }}>{k.desc}</span>
         </div>
       ))}
@@ -370,7 +370,7 @@ export default function TvDoctorPage() {
             { key: 'GET /api/log?from=', desc: 'The command output from line n onward, for the monitor' },
             { key: 'POST /api/cancel', desc: 'Stop the running command and its children' },
             { key: 'POST /api/clear', desc: 'Empty the monitor' },
-          ], '250px')}
+          ], '250px', 'left')}
 
           <p style={pStyle}>The whitelist is a plain table from button name to arguments:</p>
           <CodeBlock language="rust">{`/// Button name -> the arguments this binary is run with. A whitelist, so a
