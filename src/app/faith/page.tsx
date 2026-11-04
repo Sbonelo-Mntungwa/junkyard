@@ -297,13 +297,15 @@ export default function FaithPage() {
           border-radius: 17px;
           background: #050508;
         }
-        /* Every card gets the shape most of the photos share; wider ones are trimmed at the sides. */
+        /* Every card is 3:4, the shape of the widest photos. Taller ones are trimmed,
+           keeping most of the top: in these shots her face sits high in the frame. */
         .photo img {
           display: block;
           width: auto;
           height: min(60vh, 92vw);
-          aspect-ratio: 739 / 1600;
+          aspect-ratio: 3 / 4;
           object-fit: cover;
+          object-position: 50% 15%;
           max-width: none;
           pointer-events: none;
         }
@@ -360,6 +362,7 @@ export default function FaithPage() {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          object-position: 50% 15%;
           opacity: 0;
           mix-blend-mode: screen;
           pointer-events: none;
@@ -532,6 +535,8 @@ const shuffle = <T,>(list: T[]) => {
 // Roughly 1 glitch in 16 is the hard kind: about once a minute.
 const WRECK_CHANCE = 1 / 16;
 const WRECK_MS = 1100;
+// Width over height of every card; matches aspect-ratio on .photo img.
+const CARD_ASPECT = 3 / 4;
 
 // Redraws the photo on a canvas, frame by frame: pixelated, torn into shifted
 // bands with a red/cyan split, corrupted blocks and noise rows. Then removes it.
@@ -552,12 +557,12 @@ function wreck(card: HTMLDivElement) {
   const ctx = canvas.getContext('2d')!;
   const small = document.createElement('canvas');
   const sctx = small.getContext('2d')!;
-  // Sample the same centred area that object-fit: cover shows, so wide photos don't squash.
+  // Sample the same area that object-fit: cover and object-position: 50% 15% show.
   const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
   const cw = w / scale;
   const ch = h / scale;
-  const ox = (img.naturalWidth - cw) / 2;
-  const oy = (img.naturalHeight - ch) / 2;
+  const ox = (img.naturalWidth - cw) * 0.5;
+  const oy = (img.naturalHeight - ch) * 0.15;
   const sy = ch / h;
   const rand = (n: number) => Math.random() * n;
   const start = performance.now();
@@ -632,8 +637,8 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
     const m = motion.current;
     const resize = () => {
       const card = Math.min(window.innerHeight * 0.6, window.innerWidth * 0.92);
-      // Less than a card's width apart, so neighbours tuck behind the centre photo.
-      m.slot = Math.min(card * 0.38, window.innerWidth * 0.36);
+      // About 1.2 card widths apart, so there is a small gap between photos.
+      m.slot = card * CARD_ASPECT * 1.21;
     };
     resize();
     window.addEventListener('resize', resize);
