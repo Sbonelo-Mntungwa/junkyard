@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 
 const SHOWER_MS = 3800;
+// Random gap between showers: 25 to 75 seconds, about as rare as the hard glitch.
+const nextGap = () => 25000 + Math.random() * 50000;
 
 type Meteor = { x: number; y: number; vx: number; vy: number; len: number; r: number; life: number };
 type Spark = { x: number; y: number; r: number; born: number; ttl: number };
@@ -109,7 +111,7 @@ export default function StarShower({ zIndex = 2 }: { zIndex?: number }) {
         frame = requestAnimationFrame(tick);
       } else {
         frame = 0;
-        schedule(12000 + Math.random() * 18000);
+        schedule(nextGap());
       }
     };
 
@@ -124,7 +126,7 @@ export default function StarShower({ zIndex = 2 }: { zIndex?: number }) {
 
     resize();
     window.addEventListener('resize', resize);
-    schedule(5000 + Math.random() * 4000);
+    schedule(nextGap());
     return () => {
       clearTimeout(timer);
       cancelAnimationFrame(frame);

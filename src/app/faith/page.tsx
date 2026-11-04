@@ -46,6 +46,20 @@ export default function FaithPage() {
     setTimeout(() => setPhase('show'), 1100);
   }, [pulse]);
 
+  // Now and then the stream jumps to warp, the same burst as entering the portal.
+  useEffect(() => {
+    if (phase !== 'show') return;
+    let t: ReturnType<typeof setTimeout>;
+    const next = () => {
+      t = setTimeout(() => {
+        pulse(2200);
+        next();
+      }, 25000 + Math.random() * 50000);
+    };
+    next();
+    return () => clearTimeout(t);
+  }, [phase, pulse]);
+
   return (
     <div className="faith">
       <style jsx global>{`
