@@ -303,42 +303,17 @@ export default function FaithPage() {
         }
         .hud.top { top: max(1.2rem, 3vh); }
         .faith-title {
-          position: relative;
-          font-family: 'Orbitron', sans-serif;
-          font-weight: 900;
-          font-size: clamp(1.5rem, 5.5vw, 2.8rem);
-          letter-spacing: 0.08em;
-          line-height: 1;
-          text-transform: uppercase;
-          background: linear-gradient(135deg, #8F0177 0%, #a8028f 20%, #DE1A58 40%, #ff2d6a 60%, #06b6d4 80%, #8F0177 100%);
-          background-size: 200% 200%;
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: clamp(1.6rem, 5vw, 2.4rem);
+          letter-spacing: 0.35em;
+          padding-left: 0.35em;
+          background: linear-gradient(90deg, #f0e6ff, #ff9ec0, #06b6d4, #f0e6ff);
+          background-size: 300% 100%;
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
-          filter: drop-shadow(0 0 24px rgba(222, 26, 88, 0.45));
-          animation: gradientShift 8s ease-in-out infinite;
-        }
-        .faith-title::before,
-        .faith-title::after {
-          content: attr(data-text);
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          background-size: 200% 200%;
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .faith-title::before {
-          background-image: linear-gradient(135deg, #06b6d4 0%, #DE1A58 50%, #8F0177 100%);
-          clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-          animation: glitchBefore 4s ease-in-out infinite, gradientShift 8s ease-in-out infinite reverse;
-        }
-        .faith-title::after {
-          background-image: linear-gradient(135deg, #DE1A58 0%, #8F0177 50%, #06b6d4 100%);
-          clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-          animation: glitchAfter 4s ease-in-out infinite, gradientShift 8s ease-in-out infinite;
+          animation: shimmer 6s linear infinite;
+          filter: drop-shadow(0 0 18px rgba(222, 26, 88, 0.5));
         }
         .faith-back {
           position: fixed;
@@ -373,24 +348,6 @@ export default function FaithPage() {
         @keyframes beacon {
           0%, 100% { box-shadow: 0 0 18px rgba(222, 26, 88, 0.35); }
           50% { box-shadow: 0 0 44px rgba(222, 26, 88, 0.7), 0 0 80px rgba(6, 182, 212, 0.3); }
-        }
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        @keyframes glitchBefore {
-          0%, 85%, 100% { transform: translate(0); }
-          86% { transform: translate(-4px, -2px); }
-          88% { transform: translate(4px, 2px); }
-          90% { transform: translate(-2px, 1px); }
-          92% { transform: translate(2px, -1px); }
-        }
-        @keyframes glitchAfter {
-          0%, 85%, 100% { transform: translate(0); }
-          87% { transform: translate(4px, 2px); }
-          89% { transform: translate(-4px, -2px); }
-          91% { transform: translate(2px, -1px); }
-          93% { transform: translate(-2px, 1px); }
         }
         @keyframes glitchR {
           0% { opacity: 0.6; transform: translateX(-6px); clip-path: inset(12% 0 70% 0); }
@@ -682,7 +639,7 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
       </div>
 
       <div className="hud top">
-        <div className="faith-title" data-text="For Faith">For Faith</div>
+        <div className="faith-title">For Faith</div>
       </div>
 
     </>
