@@ -344,6 +344,18 @@ export default function FaithPage() {
         .card.glitching .ghost.c { animation: glitchC 0.6s steps(1, end) both; }
         .card.glitching .photo .base { animation: jitter 0.6s steps(1, end) both; }
 
+        /* The rare hard glitch: a canvas that wrecks the pixels for about a second */
+        .photo .shatter {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 2;
+          pointer-events: none;
+        }
+        .card.wrecked .frame { animation: shake 0.14s steps(1, end) 7; }
+        .card.wrecked .halo { opacity: 1; }
+
         @keyframes logIn { to { opacity: 1; } }
         @keyframes beacon {
           0%, 100% { box-shadow: 0 0 18px rgba(222, 26, 88, 0.35); }
@@ -371,6 +383,13 @@ export default function FaithPage() {
           40% { transform: translateX(1px); }
           60% { transform: translateX(-1px); }
           80%, 100% { transform: none; }
+        }
+        @keyframes shake {
+          0% { transform: translate(7px, -3px) skewX(-4deg); }
+          25% { transform: translate(-9px, 2px) skewX(5deg); }
+          50% { transform: translate(5px, 4px); }
+          75% { transform: translate(-6px, -2px) skewX(-3deg); }
+          100% { transform: none; }
         }
         @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes draw { to { stroke-dashoffset: 0; } }
@@ -484,6 +503,84 @@ const shuffle = <T,>(list: T[]) => {
   return out;
 };
 
+// Roughly 1 glitch in 16 is the hard kind: about once a minute.
+const WRECK_CHANCE = 1 / 16;
+const WRECK_MS = 1100;
+
+// Redraws the photo on a canvas, frame by frame: pixelated, torn into shifted
+// bands with a red/cyan split, corrupted blocks and noise rows. Then removes it.
+function wreck(card: HTMLDivElement) {
+  const photo = card.querySelector<HTMLDivElement>('.photo');
+  const img = photo?.querySelector<HTMLImageElement>('img.base');
+  if (!photo || !img || !img.complete || card.classList.contains('wrecked')) return;
+
+  const w = photo.clientWidth;
+  const h = photo.clientHeight;
+  const canvas = document.createElement('canvas');
+  canvas.className = 'shatter';
+  canvas.width = w;
+  canvas.height = h;
+  photo.appendChild(canvas);
+  card.classList.add('wrecked', 'glitching');
+
+  const ctx = canvas.getContext('2d')!;
+  const small = document.createElement('canvas');
+  const sctx = small.getContext('2d')!;
+  const sx = img.naturalWidth / w;
+  const sy = img.naturalHeight / h;
+  const rand = (n: number) => Math.random() * n;
+  const start = performance.now();
+
+  const frame = (now: number) => {
+    const t = (now - start) / WRECK_MS;
+    if (t >= 1) {
+      canvas.remove();
+      card.classList.remove('wrecked', 'glitching');
+      return;
+    }
+    // Peaks in the middle, with random spikes so it stutters rather than fades.
+    const force = Math.min(1, Math.sin(Math.PI * t) * (0.7 + rand(0.6)));
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.globalAlpha = 1;
+    ctx.imageSmoothingEnabled = false;
+
+    const block = Math.max(2, Math.round(3 + force * rand(30)));
+    small.width = Math.ceil(w / block);
+    small.height = Math.ceil(h / block);
+    sctx.drawImage(img, 0, 0, small.width, small.height);
+    ctx.drawImage(small, 0, 0, small.width, small.height, 0, 0, w, h);
+
+    for (let i = 0, n = 3 + Math.round(force * 9); i < n; i++) {
+      const y = rand(h);
+      const bh = 4 + rand(h * 0.12 * force + 6);
+      const dx = (Math.random() - 0.5) * w * 0.45 * force;
+      ctx.drawImage(img, 0, y * sy, img.naturalWidth, bh * sy, dx, y, w, bh);
+      ctx.globalCompositeOperation = 'screen';
+      ctx.globalAlpha = 0.55 * force;
+      ctx.fillStyle = Math.random() < 0.5 ? '#DE1A58' : '#06b6d4';
+      ctx.fillRect(dx + (Math.random() < 0.5 ? -8 : 8), y, w, bh);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+    }
+
+    for (let i = 0, n = Math.round(force * 7); i < n; i++) {
+      ctx.globalCompositeOperation = Math.random() < 0.35 ? 'difference' : 'source-over';
+      ctx.fillStyle = ['#ffffff', '#DE1A58', '#06b6d4', '#000000', '#f0e6ff'][Math.floor(rand(5))];
+      ctx.fillRect(Math.floor(rand(w / 8)) * 8, Math.floor(rand(h / 8)) * 8, 8 + Math.floor(rand(6)) * 8, 8 + Math.floor(rand(3)) * 8);
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+    for (let i = 0, n = Math.round(force * 14); i < n; i++) {
+      ctx.globalAlpha = 0.25 + rand(0.5);
+      ctx.fillStyle = `rgb(${rand(255) | 0}, ${rand(255) | 0}, ${rand(255) | 0})`;
+      ctx.fillRect(0, rand(h), w, 1 + rand(2));
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+}
+
 function Slideshow({ onTravel }: { onTravel: () => void }) {
   const [photos] = useState(() => shuffle(PHOTOS));
   const [index, setIndex] = useState(0);
@@ -550,13 +647,16 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
   }, []);
 
   useEffect(() => {
+    // The hard glitch flashes, so it is skipped when the OS asks for less motion.
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let t: ReturnType<typeof setTimeout>;
     const next = () => {
       t = setTimeout(() => {
         const m = motion.current;
         const visible = cards.current.filter((el, i) => el && Math.abs(wrap(i - m.pos)) < 2.5) as HTMLDivElement[];
         const el = visible[Math.floor(Math.random() * visible.length)];
-        if (el) {
+        if (el && Math.random() < WRECK_CHANCE && !calm) wreck(el);
+        else if (el) {
           el.classList.add('glitching');
           setTimeout(() => el.classList.remove('glitching'), 650);
         }
