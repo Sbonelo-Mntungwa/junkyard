@@ -297,10 +297,13 @@ export default function FaithPage() {
           border-radius: 17px;
           background: #050508;
         }
+        /* Every card gets the shape most of the photos share; wider ones are trimmed at the sides. */
         .photo img {
           display: block;
           width: auto;
           height: min(60vh, 92vw);
+          aspect-ratio: 739 / 1600;
+          object-fit: cover;
           max-width: none;
           pointer-events: none;
         }
@@ -356,6 +359,7 @@ export default function FaithPage() {
           inset: 0;
           width: 100%;
           height: 100%;
+          object-fit: cover;
           opacity: 0;
           mix-blend-mode: screen;
           pointer-events: none;
@@ -548,8 +552,13 @@ function wreck(card: HTMLDivElement) {
   const ctx = canvas.getContext('2d')!;
   const small = document.createElement('canvas');
   const sctx = small.getContext('2d')!;
-  const sx = img.naturalWidth / w;
-  const sy = img.naturalHeight / h;
+  // Sample the same centred area that object-fit: cover shows, so wide photos don't squash.
+  const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+  const cw = w / scale;
+  const ch = h / scale;
+  const ox = (img.naturalWidth - cw) / 2;
+  const oy = (img.naturalHeight - ch) / 2;
+  const sy = ch / h;
   const rand = (n: number) => Math.random() * n;
   const start = performance.now();
 
@@ -569,14 +578,14 @@ function wreck(card: HTMLDivElement) {
     const block = Math.max(2, Math.round(3 + force * rand(30)));
     small.width = Math.ceil(w / block);
     small.height = Math.ceil(h / block);
-    sctx.drawImage(img, 0, 0, small.width, small.height);
+    sctx.drawImage(img, ox, oy, cw, ch, 0, 0, small.width, small.height);
     ctx.drawImage(small, 0, 0, small.width, small.height, 0, 0, w, h);
 
     for (let i = 0, n = 3 + Math.round(force * 9); i < n; i++) {
       const y = rand(h);
       const bh = 4 + rand(h * 0.12 * force + 6);
       const dx = (Math.random() - 0.5) * w * 0.45 * force;
-      ctx.drawImage(img, 0, y * sy, img.naturalWidth, bh * sy, dx, y, w, bh);
+      ctx.drawImage(img, ox, oy + y * sy, cw, bh * sy, dx, y, w, bh);
       ctx.globalCompositeOperation = 'screen';
       ctx.globalAlpha = 0.55 * force;
       ctx.fillStyle = Math.random() < 0.5 ? '#DE1A58' : '#06b6d4';
@@ -623,7 +632,8 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
     const m = motion.current;
     const resize = () => {
       const card = Math.min(window.innerHeight * 0.6, window.innerWidth * 0.92);
-      m.slot = Math.min(card * 0.56, window.innerWidth * 0.52);
+      // Less than a card's width apart, so neighbours tuck behind the centre photo.
+      m.slot = Math.min(card * 0.38, window.innerWidth * 0.36);
     };
     resize();
     window.addEventListener('resize', resize);
