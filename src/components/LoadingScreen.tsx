@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function LoadingScreen() {
+  // The secret page has its own portal intro.
+  const pathname = usePathname();
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
@@ -25,7 +28,7 @@ export default function LoadingScreen() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!visible) return null;
+  if (!visible || pathname?.startsWith('/faith')) return null;
 
   return (
     <>
