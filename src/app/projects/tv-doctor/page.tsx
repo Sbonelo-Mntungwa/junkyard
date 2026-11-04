@@ -8,7 +8,8 @@ import CodeBlock from '@/components/CodeBlock';
 import BackToTop from '@/components/BackToTop';
 import Screenshot, { ScreenshotTabs } from '@/components/Screenshot';
 
-const img = (name: string) => `/projects/tv-doctor/${name}.jpg`;
+// Bump v when screenshots are retaken: Cloudflare caches images for 4 hours.
+const img = (name: string) => `/projects/tv-doctor/${name}.jpg?v=2`;
 const url = 'http://127.0.0.1:8787';
 
 export default function TvDoctorPage() {
