@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import CosmicBackground from '@/components/CosmicBackground';
-import { RustPiIcon, RustPi2Icon, PiMonitorIcon, MarkOneIcon, MoreIcon } from '@/icons';
+import { RustPiIcon, RustPi2Icon, PiMonitorIcon, MarkOneIcon, TvDoctorIcon, MoreIcon } from '@/icons';
 
 export default function Home() {
   return (
@@ -470,6 +470,23 @@ export default function Home() {
                 <span className="tag">Rust</span>
                 <span className="tag">CMOS</span>
                 <span className="tag">CPU</span>
+              </div>
+            </div>
+          </Link>
+
+          <Link href="/projects/tv-doctor" className="project-card featured">
+            <div className="card-face">
+              <TvDoctorIcon size={44} />
+              <span className="card-title">TV Doctor</span>
+            </div>
+            <div className="card-pop">
+              <TvDoctorIcon size={62} />
+              <span className="card-title-pop">TV Doctor</span>
+              <p className="card-desc">Finding, examining and speeding up an old Android TV from a Mac, over ADB, Cast and DIAL.</p>
+              <div className="card-tags">
+                <span className="tag">Rust</span>
+                <span className="tag">Android TV</span>
+                <span className="tag">macOS</span>
               </div>
             </div>
           </Link>
