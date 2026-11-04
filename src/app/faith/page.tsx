@@ -777,7 +777,7 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
       </div>
 
       <div className="hud top">
-        <div className="faith-title">For Faith</div>
+        <div className="faith-title">Yours Faithfully</div>
       </div>
 
     </>
