@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import WarpField from '@/components/WarpField';
+import StarShower from '@/components/StarShower';
 
 const PHOTOS = Array.from({ length: 17 }, (_, i) => `/faith/${String(i + 1).padStart(2, '0')}.jpg`);
 // Photos per second drifting right to left.
@@ -304,7 +305,7 @@ export default function FaithPage() {
         .hud.top { top: max(1.2rem, 3vh); }
         .faith-title {
           font-family: 'Bebas Neue', sans-serif;
-          font-size: clamp(1.6rem, 5vw, 2.4rem);
+          font-size: clamp(2rem, 6.5vw, 3.2rem);
           letter-spacing: 0.35em;
           padding-left: 0.35em;
           background: linear-gradient(90deg, #f0e6ff, #ff9ec0, #06b6d4, #f0e6ff);
@@ -327,6 +328,13 @@ export default function FaithPage() {
           transition: color 0.3s ease, text-shadow 0.3s ease;
         }
         .faith-back:hover { color: #f0e6ff; text-shadow: 0 0 14px rgba(222, 26, 88, 0.8); }
+        @media (max-width: 640px) {
+          .faith-back {
+            top: auto;
+            bottom: max(1.2rem, 3vh);
+            padding: 0.4rem 0;
+          }
+        }
 
         /* Gentle glitch on one photo at a time */
         .photo .ghost {
@@ -710,6 +718,7 @@ function Slideshow({ onTravel }: { onTravel: () => void }) {
       <div className="nebula one" />
       <div className="nebula two" />
       <div className="vignette" />
+      <StarShower />
 
       <div
         className={`stage${dragging ? ' dragging' : ''}`}
